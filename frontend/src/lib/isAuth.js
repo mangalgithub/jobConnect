@@ -5,7 +5,7 @@ const isAuth = () => {
 
 export const userType = () => {
 //   return localStorage.getItem("type");
-    return "jobseeker";
+    return "recruiter";
 };
 
 export default isAuth;
