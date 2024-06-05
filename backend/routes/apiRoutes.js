@@ -651,6 +651,27 @@ router.get("/jobs", async (req, res) => {
     });
 });
 
+//to get all the applications
+router.get("/user_applications", (req, res) => {
+//   const user = req.user;
+    const user = {
+      userId: "665c021f4db04a48ac2532c9",
+      type: "jobseeker",
+    };
+      Application.find({userId:user.userId}).then((applications)=>{
+          res.json(applications);
+      }).catch((err)=>{
+            res.status(400).json(err);
+        });
+});
 
+//to get all the users who signed up as jobseeker
+router.get("/jobseekers",(req,res)=>{
+    JobApplicant.find().then((jobseekers)=>{
+        res.json(jobseekers);
+    }).catch((err)=>{
+        res.status(400).json(err);
+    });
+})
 
 module.exports=router;
