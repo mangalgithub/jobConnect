@@ -10,6 +10,7 @@ import JobSearchPage from "./components/Page/JobSearchPage";
 import Navbar from "./components/Navbar";
 import AppliedJobsPage from "./components/Page/AppliedJobPage";
 import ProfilePage from "./components/Page/ProfilePage";
+import ApplicantPage from "./components/Page/ApplicantPage";
 function App() {
   return (
     <div>
@@ -25,6 +26,8 @@ function App() {
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/applications" element={<AppliedJobsPage/>}/>
           <Route path="/profile-page" element={<ProfilePage/>}/>
+          <Route path="/jobpage" element={<JobSearchPage/>}/>
+          <Route path="/applicantpage" element={<ApplicantPage/>}/>
         </Routes>
       </Router>
     </div>
