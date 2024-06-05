@@ -674,4 +674,5 @@ router.get("/jobseekers",(req,res)=>{
     });
 })
 
+
 module.exports=router;
