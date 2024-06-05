@@ -9,6 +9,7 @@ import HomePage from "./components/Page/HomePage";
 import JobSearchPage from "./components/Page/JobSearchPage";
 import Navbar from "./components/Navbar";
 import AppliedJobsPage from "./components/Page/AppliedJobPage";
+import ProfilePage from "./components/Page/ProfilePage";
 function App() {
   return (
     <div>
@@ -23,6 +24,7 @@ function App() {
           <Route path="/recruiter_profile" element={<RecruiterProfile />} />
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/applications" element={<AppliedJobsPage/>}/>
+          <Route path="/profile-page" element={<ProfilePage/>}/>
         </Routes>
       </Router>
     </div>
