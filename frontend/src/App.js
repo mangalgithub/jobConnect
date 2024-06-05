@@ -6,6 +6,7 @@ import RecruiterProfile from "./components/recruiter/Profile";
 import React from "react";
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
 import HomePage from "./components/HomePage";
+import JobSearchPage from "./components/JobSearchPage";
 function App() {
   return (
     <div>
@@ -17,6 +18,7 @@ function App() {
           <Route path="/addjobs" element={<AddJobs />} />
           <Route path="/myjobs" element={<MyJobs />} />
           <Route path="/recruiter_profile" element={<RecruiterProfile />} />
+          <Route path="/jobpage" element={<JobSearchPage/>}/>
         </Routes>
       </Router>
     </div>

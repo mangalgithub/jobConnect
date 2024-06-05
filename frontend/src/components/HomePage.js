@@ -57,121 +57,82 @@ function HomePage() {
             What Students Say About Us
           </h2>
           <div className="space-y-8 mx-auto" style={{ maxWidth: '800px' }}>
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pr-4 text-center md:text-right">
-                <p className="text-gray-700 mb-4">
-                  "This platform has been a game-changer for my career. The resources
-                  and support provided have helped me land my dream job in the tech
-                  industry. I can't thank the team enough!"
-                </p>
-                <p className="font-semibold">
-                  John Doe, Software Engineer at Tech Company
-                </p>
+            {[
+              {
+                text: "This platform has been a game-changer for my career. The resources and support provided have helped me land my dream job in the tech industry. I can't thank the team enough!",
+                name: "John Doe, Software Engineer at Tech Company",
+                imgSrc: "https://randomuser.me/api/portraits/men/32.jpg",
+                alt: "John Doe",
+                imgFirst: false,
+              },
+              {
+                text: "The job listings are relevant and up-to-date. The community and networking opportunities are invaluable. Highly recommend to all students looking to advance their careers.",
+                name: "Jane Smith, Product Manager at Startup Inc.",
+                imgSrc: "https://randomuser.me/api/portraits/women/44.jpg",
+                alt: "Jane Smith",
+                imgFirst: true,
+              },
+              {
+                text: "An excellent platform with a wide range of job opportunities and support for students at all stages of their careers.",
+                name: "Alice Johnson, UX Designer at Creative Agency",
+                imgSrc: "https://randomuser.me/api/portraits/women/68.jpg",
+                alt: "Alice Johnson",
+                imgFirst: false,
+              },
+              {
+                text: "The resources and guidance provided were instrumental in helping me secure an internship at a top company.",
+                name: "Robert Brown, Intern at Global Corp",
+                imgSrc: "https://randomuser.me/api/portraits/men/54.jpg",
+                alt: "Robert Brown",
+                imgFirst: true,
+              },
+              {
+                text: "The platform's user-friendly interface and comprehensive job listings made my job search experience seamless and efficient.",
+                name: "Emily Davis, Data Analyst at Tech Solutions",
+                imgSrc: "https://randomuser.me/api/portraits/women/72.jpg",
+                alt: "Emily Davis",
+                imgFirst: false,
+              },
+              {
+                text: "A fantastic resource for students looking to enter the workforce. The support and guidance provided are top-notch.",
+                name: "Michael Wilson, Marketing Specialist at Ad Agency",
+                imgSrc: "https://randomuser.me/api/portraits/men/62.jpg",
+                alt: "Michael Wilson",
+                imgFirst: true,
+              },
+            ].map((testimonial, index) => (
+              <div className="flex flex-col md:flex-row items-center" key={index}>
+                {testimonial.imgFirst ? (
+                  <>
+                    <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">
+                      <img
+                        src={testimonial.imgSrc}
+                        alt={testimonial.alt}
+                        className="rounded-lg shadow-md mb-2"
+                      />
+                    </div>
+                    <div className="md:w-1/2 mb-4 md:mb-0 md:pl-4 text-center md:text-left order-1 md:order-2">
+                      <p className="text-gray-700 mb-4">{testimonial.text}</p>
+                      <p className="font-semibold">{testimonial.name}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="md:w-1/2 mb-4 md:mb-0 md:pr-4 text-center md:text-right">
+                      <p className="text-gray-700 mb-4">{testimonial.text}</p>
+                      <p className="font-semibold">{testimonial.name}</p>
+                    </div>
+                    <div className="md:w-1/2 text-center md:text-left">
+                      <img
+                        src={testimonial.imgSrc}
+                        alt={testimonial.alt}
+                        className="rounded-lg shadow-md mb-2"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="md:w-1/2 text-center md:text-left">
-                <img
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
-                  alt="John Doe"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">
-                <img
-                  src="https://randomuser.me/api/portraits/women/44.jpg"
-                  alt="Jane Smith"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pl-4 text-center md:text-left order-1 md:order-2">
-                <p className="text-gray-700 mb-4">
-                  "The job listings are relevant and up-to-date. The community and
-                  networking opportunities are invaluable. Highly recommend to all
-                  students looking to advance their careers."
-                </p>
-                <p className="font-semibold">
-                  Jane Smith, Product Manager at Startup Inc.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pr-4 text-center md:text-right">
-                <p className="text-gray-700 mb-4">
-                  "An excellent platform with a wide range of job opportunities and
-                  support for students at all stages of their careers."
-                </p>
-                <p className="font-semibold">
-                  Alice Johnson, UX Designer at Creative Agency
-                </p>
-              </div>
-              <div className="md:w-1/2 text-center md:text-left">
-                <img
-                  src="https://randomuser.me/api/portraits/women/68.jpg"
-                  alt="Alice Johnson"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">
-                <img
-                  src="https://randomuser.me/api/portraits/men/54.jpg"
-                  alt="Robert Brown"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pl-4 text-center md:text-left order-1 md:order-2">
-                <p className="text-gray-700 mb-4">
-                  "The resources and guidance provided were instrumental in helping me
-                  secure an internship at a top company."
-                </p>
-                <p className="font-semibold">
-                  Robert Brown, Intern at Global Corp
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pr-4 text-center md:text-right">
-                <p className="text-gray-700 mb-4">
-                  "The platform's user-friendly interface and comprehensive job listings
-                  made my job search experience seamless and efficient."
-                </p>
-                <p className="font-semibold">
-                  Emily Davis, Data Analyst at Tech Solutions
-                </p>
-              </div>
-              <div className="md:w-1/2 text-center md:text-left">
-                <img
-                  src="https://randomuser.me/api/portraits/women/72.jpg"
-                  alt="Emily Davis"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">
-                <img
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
-                  alt="Michael Wilson"
-                  className="rounded-lg shadow-md mb-2"
-                />
-              </div>
-              <div className="md:w-1/2 mb-4 md:mb-0 md:pl-4 text-center md:text-left order-1 md:order-2">
-                <p className="text-gray-700 mb-4">
-                  "A fantastic resource for students looking to enter the workforce.
-                  The support and guidance provided are top-notch."
-                </p>
-                <p className="font-semibold">
-                  Michael Wilson, Marketing Specialist at Ad Agency
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
