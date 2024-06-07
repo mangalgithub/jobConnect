@@ -1,36 +1,140 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import {Link } from "react-router-dom"; 
-const Login = () => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <form className="flex max-w-md flex-col gap-4">
-        <div>
-          <p className="text-4xl justify-center mb-4">Login To JobConnect</p>
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="email1" value="Your email" />
-          </div>
-          <TextInput
-            id="email1"
-            type="email"
-            placeholder="test@gmail.com"
-            required
-          />
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="password1" value="Your password" />
-          </div>
-          <TextInput id="password1" type="password" required />
-        </div>
-        <Button type="submit">Login</Button>
-        <div className="mt-4">
-          Not signed up? <Link to="/" className="text-blue-600">Signup here</Link>
-        </div>
-      </form>
-    </div>
-  );
-};
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
-export default Login;
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      
+      // if (!token) {
+      //   // Handle case where token does not exist in localStorage
+      //   setError("Token not found. Please log in again.");
+      //   toast.error("Token not found. Please log in again.");
+      //   return;
+      // }
+
+      const response = await axios.post(
+        "http://localhost:5000/user/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Include token in Authorization header
+          },
+        }
+      );
+
+        localStorage.setItem("token", response.data.token);
+       navigate("/home");
+
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
+      setError("Invalid credentials. Please try again.");
+      toast.error("Invalid credentials. Please try again.");
+    }
+  };
+
+  return (
+    <>
+      <Toaster />
+      <div className="flex h-screen bg-gradient-to-b from-indigo-800 to-indigo-600">
+        <div className="m-auto w-full max-w-md">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-extrabold text-white">
+              Log in to your account
+            </h2>
+          </div>
+
+          <div className="mt-8 bg-white shadow-md rounded-md p-8">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Enter your email address"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Password
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Log in
+                </button>
+              </div>
+            </form>
+
+            {error && (
+              <div className="mt-4 text-center">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
+
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Not a member?{" "}
+                <Link
+                  to="/signup"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
