@@ -3,9 +3,9 @@ const app=express();
 require("dotenv").config();
 const cors=require("cors");
 const db=require("./config/mongoose");
-const apiRoutes=require("./routes/apiRoutes");
-const downloadRoutes=require("./routes/downloadRoutes");
-
+const apiRoutes=require("./routes/apiRoutes.js");
+const downloadRoutes=require("./routes/downloadRoutes.js");
+const UserRoute=require("./routes/UserRoute.js")
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -17,6 +17,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api",apiRoutes);
 app.use("/download",downloadRoutes);
+app.use("/user",UserRoute)
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 })
