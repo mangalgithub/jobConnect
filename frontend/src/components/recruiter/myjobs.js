@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FilterIcon } from "@heroicons/react/solid";
 import { StarIcon } from "@heroicons/react/solid";
+import axios from "axios";
 const JobTile = (props) => {
   const { job } = props;
   const [open, setOpen] = useState(false);
@@ -27,6 +28,7 @@ const JobTile = (props) => {
   };
 
   const postedOn = new Date(job.dateOfPosting);
+  const deadline = new Date(job.deadline);
 
   return (
     <div className="w-3/4 mx-auto p-4">
@@ -35,7 +37,7 @@ const JobTile = (props) => {
         <div className="flex flex-col items-center w-full">
           <h3 className="font-bold text-xl">{job.title}</h3>
           <div className="flex">
-             {Array.from({ length: job.rating }).map((_, i) => (
+            {Array.from({ length: job.rating }).map((_, i) => (
               <StarIcon className="w-5 h-5 text-yellow-500" />
             ))}
           </div>
@@ -50,13 +52,14 @@ const JobTile = (props) => {
               Date Of Posting: {postedOn.toLocaleDateString()}
             </div>
             <div className="mb-2">
-              Number of Applicants: {job.maxApplicants}
+              Deadline: {deadline.toLocaleDateString()}
             </div>
             <div className="mb-2">
               Remaining Number of Positions:{" "}
               {job.maxPositions - job.acceptedCandidates}
             </div>
             <div className="mb-4">
+              Skills:{" "}
               {job.skillsets.map((skill) => (
                 <span
                   key={skill}
@@ -345,54 +348,22 @@ const JobListing = () => {
   });
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
+  
 //   const setPopup = useContext(SetPopupContext);
 
-  // Dummy data for job listings
-  useEffect(() => {
-    setJobs([
-      {
-        _id: "1",
-        title: "Software Engineer",
-        rating: 5,
-        jobType: "Full Time",
-        salary: 60000,
-        duration: 6,
-        dateOfPosting: new Date().toISOString(),
-        maxApplicants: 50,
-        maxPositions: 5,
-        acceptedCandidates: 2,
-        skillsets: ["JavaScript", "React", "Node.js"],
-      },
-      {
-        _id: "2",
-        title: "Data Scientist",
-        rating: 4,
-        jobType: "Part Time",
-        salary: 40000,
-        duration: 3,
-        dateOfPosting: new Date().toISOString(),
-        maxApplicants: 30,
-        maxPositions: 3,
-        acceptedCandidates: 1,
-        skillsets: ["Python", "Machine Learning", "Data Analysis"],
-      },
-      {
-        _id: "3",
-        title: "UI/UX Designer",
-        rating: 3,
-        jobType: "Work From Home",
-        salary: 35000,
-        duration: 0,
-        dateOfPosting: new Date().toISOString(),
-        maxApplicants: 20,
-        maxPositions: 2,
-        acceptedCandidates: 0,
-        skillsets: ["Adobe XD", "Figma", "Sketch"],
-      },
-    ]);
-    setLoading(false);
-  }, []);
+useEffect(()=>{
+ try{
+  const fetchJobs=async()=>{
+    const res = await axios.get("http://localhost:5000/api/jobs");
+    setJobs(res.data);
+    console.log("res",res);
+ }
+  fetchJobs();
+}catch(err){
+  console.log(err);
+}
+  setLoading(false);
+},[])
 
   return (
     <div className="flex flex-col items-center">

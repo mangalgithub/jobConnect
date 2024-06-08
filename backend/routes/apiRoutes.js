@@ -447,7 +447,7 @@ router.get("/users", async (req, res) => {
         _id: "665c003b4db04a48ac2532c2",
         type: "recruiter",
         }
-  console.log("url", req.query.skill);
+  // console.log("url", req.query.skill);
   if (user.type != "recruiter") {
     res.status(401).json({
       message: "You don't have permissions to access the applicants",

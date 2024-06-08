@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import isAuth, { userType } from "../lib/isAuth";
-
 const Navbar = () => {
   return (
     <nav className="navbar flex justify-between items-center shadow-sm px-10 py-4">
@@ -24,8 +23,8 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/employees" className="nav-link">
-                  <h5>Employees</h5>
+                <Link to="/applicantpage" className="nav-link">
+                  <h5>Job Seekers</h5>
                 </Link>
               </li>
               <li className="nav-item">

@@ -12,15 +12,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
-      console.log(token)
-      // if (!token) {
-      //   // Handle case where token does not exist in localStorage
-      //   setError("Token not found. Please log in again.");
-      //   toast.error("Token not found. Please log in again.");
-      //   return;
-      // }
-
       const response = await axios.post(
         "http://localhost:5000/user/login",
         {
@@ -30,13 +21,14 @@ export default function Login() {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Include token in Authorization header
           },
         }
       );
-
-        localStorage.setItem("token", response.data.token);
-       navigate("/home");
+      console.log("response", response.data); // Handle the response as needed
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userType", response.data.type); // Assuming response.data.userType exists
+      console.log("token", response.data.token);
+      navigate("/home");
 
       toast.success(response.data.message);
     } catch (error) {
