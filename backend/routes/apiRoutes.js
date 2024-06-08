@@ -1,6 +1,7 @@
 const express=require('express');
 const mongoose=require('mongoose');
 const jwtAuth=require('../lib/jwtAuth');
+const {protect}=require('../middleware/auth');
 const JobApplicant=require('../models/JobApplicant');
 const Recruiter=require('../models/Recruiter');
 const Rating=require('../models/Rating');
@@ -441,28 +442,43 @@ router.put("/rating", (req, res) => {
 });
 
 // to get all the users on the recruiter page
-router.get("/users", async (req, res) => {
-//   const user = req.user;
-    const user = {
-        _id: "665c003b4db04a48ac2532c2",
-        type: "recruiter",
-        }
-  // console.log("url", req.query.skill);
-  if (user.type != "recruiter") {
-    res.status(401).json({
-      message: "You don't have permissions to access the applicants",
-    });
+router.get("/users",protect, async (req, res) => {
+  // console.log("req",req);
+  const user = req.user;
+ try{
+    const applications = await Application.find({ recruiterId: user._id });
+    // console.log(applications);
+  
+    const userIds=applications.map((application)=>application.userId);
+    // console.log(userIds);
+    const jobApplicants = await JobApplicant.find({
+         userId: { $in: userIds },
+       });
+    // console.log("jobapplicants",jobApplicants);
+    res.json(jobApplicants);
+  } catch (error) {
+    console.error(error);
   }
-  let users = await JobApplicant.find();
-  if (req.query.skill && req.query.skill !== "undefined") {
-    users = await JobApplicant.find({ skills: req.query.skill });
-  }
-  // console.log("users", users);
-  return res.status(200).json({
-    message: "success",
-    users,
-  });
-});
+ });
+    // .then((applications) => {
+    //   let users = [];
+    //   applications.map((application) => {
+    //     JobApplicant.findById(application.userId)
+    //       .then((jobApplicant) => {
+    //         users.push(jobApplicant);
+    //       })
+    //       .catch((err) => {
+    //         res.status(400).json(err);
+    //       });
+    //   }
+    //   );
+    //   res.json(users);
+    // }
+    // )
+    // .catch((err) => {
+    //   res.status(400).json(err);
+    // });
+// });
 
 //to get all the jobs created by recruiter
 router.get("/jobs", async (req, res) => {
@@ -652,12 +668,12 @@ router.get("/jobs", async (req, res) => {
 });
 
 //to get all the applications
-router.get("/user_applications", (req, res) => {
-//   const user = req.user;
-    const user = {
-      userId: "665c021f4db04a48ac2532c9",
-      type: "jobseeker",
-    };
+router.get("/user_applications",protect, (req, res) => {
+  const user = req.user;
+    // const user = {
+    //   userId: "665c021f4db04a48ac2532c9",
+    //   type: "jobseeker",
+    // };
       Application.find({userId:user.userId}).then((applications)=>{
           res.json(applications);
       }).catch((err)=>{
