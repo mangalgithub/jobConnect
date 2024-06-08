@@ -51,7 +51,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/profile-page" className="nav-link">
+                <Link to="/profile" className="nav-link">
                   <h5>Profile</h5>
                 </Link>
               </li>

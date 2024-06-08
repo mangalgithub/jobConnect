@@ -25,16 +25,26 @@ export default function Login() {
         }
       );
       console.log("response", response.data); // Handle the response as needed
+      
+      // Set token in Authorization header
+            console.log("token", response.data.token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userType", response.data.type); // Assuming response.data.userType exists
-      console.log("token", response.data.token);
+
       navigate("/home");
 
       toast.success(response.data.message);
     } catch (error) {
       console.log(error);
-      setError("Invalid credentials. Please try again.");
-      toast.error("Invalid credentials. Please try again.");
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        setError("Invalid credentials. Please try again.");
+        toast.error("Invalid credentials. Please try again.");
+      }
     }
   };
 
