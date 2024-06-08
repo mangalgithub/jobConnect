@@ -5,17 +5,21 @@ import toast, { Toaster } from "react-hot-toast";
 import { storage } from "./firebase/firebase.js";
 import { v4 as uuidv4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import imageCompression from 'browser-image-compression';
+
 export default function Signup() {
   const [name, setName] = useState("");
   const [type, setType] = useState("recruiter"); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [pic,setPic]=useState(null)
+  const [pic, setPic] = useState(null);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setPic(file);
-};
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,25 +28,44 @@ export default function Signup() {
     }
 
     try {
-      const imageRef = ref(storage, `images/${uuidv4()}`);
-            await uploadBytes(imageRef, pic);
-            const downloadURL = await getDownloadURL(imageRef);
-      console.log(downloadURL);
+      let downloadURL = "";
+      if (pic) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 800,
+          useWebWorker: true
+        };
+        
+        const compressedFile = await imageCompression(pic, options);
+        console.log('Original File:', pic);
+        console.log('Compressed File:', compressedFile);
+
+        const imageRef = ref(storage, `images/${uuidv4()}`);
+        await uploadBytes(imageRef, compressedFile);
+        downloadURL = await getDownloadURL(imageRef);
+        console.log(downloadURL);
+      }
+    
       const response = await axios.post("http://localhost:5000/user/register", {
-        name:name,
-        email:email,
-        password:password,
-        type:type,
-        pic:downloadURL
+        name: name,
+        email: email,
+        password: password,
+        type: type,
+        pic: downloadURL
       }, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data); // Handle the response as needed
+      console.log(response.data); 
       toast.success("Signup successful!");
     } catch (error) {
-      toast.error("Invalid credentials. Please try again.");
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Invalid credentials. Please try again.");
+      }
+      console.error("Error:", error);
     }
   };
 
@@ -150,33 +173,33 @@ export default function Signup() {
                   />
                 </div>
                 <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="pic"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Choose pic
-                  </label>
-                </div>
-                <div className="mt-1">
-                  <input
-                    id="pic"
-                    name="pic"
-                    type="file"
-                    autoComplete="pic"
-                    required
-                    // value={pic}
-                    onChange ={handleFileChange}
-                    accept="image/*"
-                    className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Enter confirm password"
-                  />
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="pic"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Choose pic
+                    </label>
+                  </div>
+                  <div className="mt-1">
+                    <input
+                      id="pic"
+                      name="pic"
+                      type="file"
+                      autoComplete="pic"
+                      required
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter confirm password"
+                    />
+                  </div>
                 </div>
               </div>
-              </div>
+
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                 Select Role
+                  Select Role
                 </label>
                 <div className="mt-1">
                   <select
@@ -189,11 +212,10 @@ export default function Signup() {
                     onChange={(e) => setType(e.target.value)}
                     className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Enter your role"
-                    
                   >
                     <option value="recruiter">Recruiter</option>
                     <option value="jobseeker">JobSeeker</option>
-                    </select>
+                  </select>
                 </div>
               </div>
 

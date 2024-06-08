@@ -18,7 +18,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/home" element={<HomePage/>}/>
           <Route path="/addjobs" element={<AddJobs />} />
@@ -26,11 +26,12 @@ function App() {
           <Route path="/recruiter_profile" element={<RecruiterProfile />} />
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/applications" element={<AppliedJobsPage/>}/>
-          <Route path="/profile-page" element={<ProfilePage/>}/>
+          <Route path="/profile" element={<ProfilePage/>}/>
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/applicantpage" element={<ApplicantPage/>}/>
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/logout" element={<LogoutPage/>}/>
+          <Route path="/jobpage" element={<JobSearchPage/>}/>
         </Routes>
       </Router>
     </div>
