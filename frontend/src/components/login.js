@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      
+      console.log(token)
       // if (!token) {
       //   // Handle case where token does not exist in localStorage
       //   setError("Token not found. Please log in again.");
