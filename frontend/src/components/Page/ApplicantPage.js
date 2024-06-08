@@ -88,17 +88,22 @@ function ApplicantPage() {
      useEffect(() => {
        const fetchApplicants = async () => {
          try {
-           const response = await fetch("http://localhost:5000/api/users");
+           const token = localStorage.getItem("token");
+           const response = await fetch("http://localhost:5000/api/users", {
+             method: "GET",
+             headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`,
+             },
+           });
            if (!response.ok) {
              throw new Error(`HTTP error! Status: ${response.status}`);
            }
            const data = await response.json();
-           const data1=data.users;
-           console.log("Fetched data:", data); // Log the entire response
-
-           // Check if data is an array
-           if (Array.isArray(data1)) {
-             setApplicants(data1);
+          //  const data1=data.users;
+           console.log("Fetched data:", data); 
+           if (Array.isArray(data)) {
+             setApplicants(data);
            } else {
              console.error("Fetched data is not an array:", data);
            }
@@ -125,7 +130,7 @@ function ApplicantPage() {
            Job Applicants
          </h1>
         
-         {applicants.length > 0 ? (
+         {applicants && applicants.length > 0 ? (
            applicants.map((applicant, index) => (
              <ApplicantCard
                key={index}

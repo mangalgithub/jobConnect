@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import isAuth ,{userType} from "../../lib/isAuth";
 function HomePage() {
   return (
     <div className="bg-gray-100">
@@ -27,9 +27,25 @@ function HomePage() {
               and more recently with desktop publishing software like Aldus
               PageMaker including versions of Lorem Ipsum.
             </p>
-            <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            {isAuth?(
+              userType() === "recruiter" ? (
+                <Link to="/addjobs" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                  Add Jobs
+                </Link>
+              ) : (
+                <Link to="/jobpage" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                  Browse Jobs
+                </Link>
+              )
+            ):(
+              <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                Login to Browse Jobs
+              </Link>
+            
+            )}
+            {/* <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
               Login to Browse Jobs
-            </Link>
+            </Link> */}
           </div>
 
           {/* Photo */}

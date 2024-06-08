@@ -24,7 +24,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link to="/applicantpage" className="nav-link">
-                  <h5>Job Seekers</h5>
+                  <h5>Applicants</h5>
                 </Link>
               </li>
               <li className="nav-item">
@@ -41,7 +41,7 @@ const Navbar = () => {
           ) : (
             <ul className="flex space-x-6">
               <li className="nav-item">
-                <Link to="/browse" className="nav-link">
+                <Link to="/jobpage" className="nav-link">
                   <h5>Browse</h5>
                 </Link>
               </li>
@@ -51,7 +51,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/profile" className="nav-link">
+                <Link to="/profile-page" className="nav-link">
                   <h5>Profile</h5>
                 </Link>
               </li>

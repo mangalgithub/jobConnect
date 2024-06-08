@@ -15,7 +15,7 @@ export default function LogoutPage() {
      // delete axios.defaults.headers.common["Authorization"];
 
       // Navigate to login page
-      navigate("/login");
+      navigate("/");
       console.log("Logout")
     };
 
