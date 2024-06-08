@@ -7,21 +7,20 @@ const Recruiter=require('../models/Recruiter');
 const Rating=require('../models/Rating');
 const Application=require('../models/Application');
 const Job=require('../models/Job');
+const User=require('../models/User');
 const router=express.Router();
 
 //Need to add jwtAuth middleware in /user route***
 
-router.put("/user", (req, res) => {
-//   const user = req.user;
-    const user = {
-      _id: "665c003b4db04a48ac2532c2",
-      type: "jobseeker",
-    };
+router.put("/profile_update",protect, async(req, res) => {
+  const user = req.user;
+  // console.log(user);
   const data = req.body;
-  console.log(user);
+  console.log("data ",data);
+  // console.log(user);
   if (user.type == "recruiter") {
-    // Recruiter.findOne({ userId: user._id })
-      Recruiter.findById(user._id)
+    // User.findOne({ userId: user._id })
+      User.findById(user._id)
       .then((recruiter) => {
         if (recruiter == null) {
           res.status(404).json({
@@ -53,7 +52,7 @@ router.put("/user", (req, res) => {
         res.status(400).json(err);
       });
   } else {
-    JobApplicant.findById(user._id)
+    JobApplicant.findOne({userId:user._id})
       .then((jobApplicant) => {
         if (jobApplicant == null) {
           res.status(404).json({
@@ -65,7 +64,12 @@ router.put("/user", (req, res) => {
           jobApplicant.name = data.name;
         }
         if (data.education) {
-          jobApplicant.education = data.education;
+            const formattedEducation = data.education.map((institution) => ({
+              institutionName: institution.name.trim(), // Use institutionName and trim whitespace
+              startYear: institution.startYear,
+              endYear: institution.endYear,
+            }));
+            jobApplicant.education = formattedEducation;
         }
         if (data.skills) {
           jobApplicant.skills = data.skills;
@@ -73,7 +77,7 @@ router.put("/user", (req, res) => {
         if (data.resume) {
           jobApplicant.resume = data.resume;
         }
-        if (data.profile) {
+        if (data.profilePhoto) {
           jobApplicant.profile = data.profile;
         }
         // console.log(jobApplicant);

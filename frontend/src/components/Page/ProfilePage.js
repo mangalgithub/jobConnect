@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 function ProfilePage() {
   const [institutions, setInstitutions] = useState([
     { id: 1, name: '', startYear: '', endYear: '' },
   ]);
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
+  const [name,setName]=useState('');
   const [resume, setResume] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
 
@@ -22,6 +23,10 @@ function ProfilePage() {
     );
     setInstitutions(updatedInstitutions);
   };
+
+  const handleNameChange=(e)=>{
+    setName(e.target.value);
+  }
 
   const handleAddSkill = () => {
     if (newSkill) {
@@ -42,8 +47,33 @@ function ProfilePage() {
     setProfilePhoto(e.target.files[0]);
   };
 
-  const handleUpdateDetails = () => {
+  const handleUpdateDetails =async() => {
     // Handle updating details logic here
+     try{
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        "http://localhost:5000/api/profile_update",
+         {
+            name: name,
+            education: institutions,
+            skills: skills,
+            resume: resume,
+            profilePhoto: profilePhoto,
+         },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data); // Handle the response as needed
+      // toast.success("Signup successful!");
+     }
+     catch (error) {
+      // toast.error("Invalid credentials. Please try again.");
+    }
+
     console.log('Details updated');
   };
 
@@ -55,7 +85,7 @@ function ProfilePage() {
         {/* Name Section */}
         <div className="bg-white p-6 mb-6 rounded-md shadow-md">
           <label className="block mb-2 font-semibold">Name</label>
-          <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+          <input type="text" value={name} onChange={handleNameChange} className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300" />
         </div>
 
         {/* Institutions Section */}
