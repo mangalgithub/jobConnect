@@ -8,6 +8,7 @@ const downloadRoutes=require("./routes/downloadRoutes.js");
 const UserRoute=require("./routes/UserRoute.js");
 const Addroute=require("./routes/AddRoute.js");
 const ProfileRoute=require("./routes/Profilejobsekroute.js");
+const getAllJobRoute=require("./routes/FetchJobs.js")
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -22,6 +23,7 @@ app.use("/download",downloadRoutes);
 app.use("/user",UserRoute)
 app.use("/apps",Addroute);
 app.use("/seeker",ProfileRoute);
+app.use("/alljob",getAllJobRoute)
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 })
