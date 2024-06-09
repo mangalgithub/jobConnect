@@ -7,7 +7,7 @@ const JobTile = (props) => {
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [jobDetails, setJobDetails] = useState(job);
-
+  const [isLoading, setLoading] = useState(false);
   const handleInput = (key, value) => {
     setJobDetails({
       ...jobDetails,
@@ -26,6 +26,50 @@ const JobTile = (props) => {
   const handleCloseUpdate = () => {
     setOpenUpdate(false);
   };
+  const handleUpdate = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:5000/api/jobs/${job._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(jobDetails),
+      });
+      const data = await res.json();
+      // setJobDetails(data);
+      console.log(data);
+      setOpenUpdate(false);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+    finally{
+      setLoading(false);
+    }
+  };
+
+
+  const handleDeleteJob=async()=>{
+    try{
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:5000/api/jobs/${job._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+      setOpen(false);
+      window.location.reload();
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   const postedOn = new Date(job.dateOfPosting);
   const deadline = new Date(job.deadline);
@@ -56,7 +100,7 @@ const JobTile = (props) => {
             </div>
             <div className="mb-2">
               Remaining Number of Positions:{" "}
-              {job.maxPositions - job.acceptedCandidates}
+              {job.maxApplicants - job.acceptedCandidates}
             </div>
             <div className="mb-4">
               Skills:{" "}
@@ -120,7 +164,7 @@ const JobTile = (props) => {
               <div className="bg-white p-8 rounded-lg shadow-lg">
                 <h4 className="text-xl mb-4">Are you sure?</h4>
                 <div className="flex justify-between">
-                  <button className="bg-red-500 text-white px-4 py-2 rounded">
+                  <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={handleDeleteJob}>
                     Delete
                   </button>
                   <button
@@ -161,7 +205,7 @@ const JobTile = (props) => {
               aria-modal="true"
               aria-labelledby="modal-headline"
             >
-              <div className="bg-white p-8 rounded-lg shadow-lg">
+              {/* <div className="bg-white p-8 rounded-lg shadow-lg">
                 <h4 className="text-xl mb-4">Update Details</h4>
                 <div className="flex flex-col space-y-4">
                   <input
@@ -189,7 +233,7 @@ const JobTile = (props) => {
                     className="px-4 py-2 border rounded"
                   />
                   <div className="flex justify-between">
-                    <button className="bg-green-500 text-white px-4 py-2 rounded">
+                    <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleUpdate}>
                       Update
                     </button>
                     <button
@@ -200,7 +244,60 @@ const JobTile = (props) => {
                     </button>
                   </div>
                 </div>
+              </div> */}
+
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h4 className="text-xl mb-4">Update Details</h4>
+                <div className="flex flex-col space-y-4">
+                  <input
+                    type="datetime-local"
+                    // Uncomment and use the value when not loading
+                    // value={!isLoading ? jobDetails.deadline.substr(0, 16) : ''}
+                    onChange={(e) => handleInput("deadline", e.target.value)}
+                    className="px-4 py-2 border rounded"
+                    disabled={isLoading} // Disable input when loading
+                  />
+                  <input
+                    type="number"
+                    value={jobDetails.maxApplicants}
+                    onChange={(e) =>
+                      handleInput("maxApplicants", e.target.value)
+                    }
+                    min="1"
+                    className="px-4 py-2 border rounded"
+                    disabled={isLoading} // Disable input when loading
+                  />
+                  <input
+                    type="number"
+                    value={jobDetails.maxPositions}
+                    onChange={(e) =>
+                      handleInput("maxPositions", e.target.value)
+                    }
+                    min="1"
+                    className="px-4 py-2 border rounded"
+                    disabled={isLoading} // Disable input when loading
+                  />
+                  <div className="flex justify-between">
+                    <button
+                      className="bg-green-500 text-white px-4 py-2 rounded"
+                      onClick={handleUpdate}
+                      disabled={isLoading} // Disable button when loading
+                    >
+                      {isLoading ? "Updating..." : "Update"}{" "}
+                      {/* Change button text based on loading state */}
+                    </button>
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      onClick={handleCloseUpdate}
+                      disabled={isLoading} // Optionally disable cancel button when loading
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
               </div>
+
+
             </div>
           </div>
         </div>
@@ -354,9 +451,18 @@ const JobListing = () => {
 useEffect(()=>{
  try{
   const fetchJobs=async()=>{
-    const res = await axios.get("http://localhost:5000/api/jobs");
-    setJobs(res.data);
-    console.log("res",res);
+             const token = localStorage.getItem("token");
+             const res = await fetch("http://localhost:5000/api/jobs", {
+               method: "GET",
+               headers: {
+                 "Content-Type": "application/json",
+                 Authorization: `Bearer ${token}`,
+               },
+             });
+             const jobs=await res.json();
+             console.log("jobs ",jobs);
+             setJobs(jobs);
+    // console.log("res",res);
  }
   fetchJobs();
 }catch(err){
@@ -386,7 +492,7 @@ useEffect(()=>{
         <div>Loading...</div>
       ) : (
         <div className="w-full grid grid-cols-1 gap-4 p-4">
-          {jobs.length > 0 ? (
+          {jobs && jobs.length > 0 ? (
             jobs.map((job) => <JobTile key={job._id} job={job} />)
           ) : (
             <div className="text-center text-gray-500">No jobs found</div>

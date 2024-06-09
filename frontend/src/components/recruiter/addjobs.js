@@ -34,6 +34,16 @@ const AddJobs = () => {
       });
       if (response.status === 201) {
         toast.success("Job added successfully!");
+        setJobDetails({
+          title: "",
+          skillsets: [],
+          jobType: "Full Time",
+          duration: 0,
+          salary: 0,
+          deadline: "",
+          maxApplicants: 1,
+          maxPositions: 1,
+        });
       }
     } catch (error) {
       console.error("Error adding job:", error);

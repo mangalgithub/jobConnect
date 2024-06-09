@@ -464,212 +464,58 @@ router.get("/users",protect, async (req, res) => {
     console.error(error);
   }
  });
-    // .then((applications) => {
-    //   let users = [];
-    //   applications.map((application) => {
-    //     JobApplicant.findById(application.userId)
-    //       .then((jobApplicant) => {
-    //         users.push(jobApplicant);
-    //       })
-    //       .catch((err) => {
-    //         res.status(400).json(err);
-    //       });
-    //   }
-    //   );
-    //   res.json(users);
-    // }
-    // )
-    // .catch((err) => {
-    //   res.status(400).json(err);
-    // });
-// });
 
 //to get all the jobs created by recruiter
-router.get("/jobs", async (req, res) => {
-//   let user = req.user;
-     const user = {
-       _id: "665c00e84db04a48ac2532c7",
-       type: "recruiter",
-     };
-
-  let findParams = {};
-  let sortParams = {};
-
-  // to list down jobs posted by a particular recruiter
-  if (user.type === "recruiter" && req.query.myjobs) {
-    findParams = {
-      ...findParams,
-      userId: user._id,
-    };
+router.get("/jobs",protect, async (req, res) => {
+  const user = req.user;
+  try{
+    const jobs = await Job.find({ userId: user._id });
+    res.json(jobs);
+    console.log(jobs);
+  } catch (error) {
+    console.error(error);
   }
-
-  if (req.query.q) {
-    findParams = {
-      ...findParams,
-      title: {
-        $regex: new RegExp(req.query.q, "i"),
-      },
-    };
-  }
-
-  if (req.query.skill) {
-    // findParams = {
-    //   ...findParams,
-    //   skillsets: {
-    //     $regex: new RegExp(req.query.skill, "i"),
-    //   },
-    // };
-
-    findParams = {
-      ...findParams,
-      skillsets: {
-        $eq: req.query.skill,
-      },
-    };
-  }
-  if (req.query.jobType) {
-    let jobTypes = [];
-    if (Array.isArray(req.query.jobType)) {
-      jobTypes = req.query.jobType;
-    } else {
-      jobTypes = [req.query.jobType];
-    }
-    // console.log(jobTypes);
-    findParams = {
-      ...findParams,
-      jobType: {
-        $in: jobTypes,
-      },
-    };
-  }
-
-  if (req.query.salaryMin && req.query.salaryMax) {
-    findParams = {
-      ...findParams,
-      $and: [
-        {
-          salary: {
-            $gte: parseInt(req.query.salaryMin),
-          },
-        },
-        {
-          salary: {
-            $lte: parseInt(req.query.salaryMax),
-          },
-        },
-      ],
-    };
-  } else if (req.query.salaryMin) {
-    findParams = {
-      ...findParams,
-      salary: {
-        $gte: parseInt(req.query.salaryMin),
-      },
-    };
-  } else if (req.query.salaryMax) {
-    findParams = {
-      ...findParams,
-      salary: {
-        $lte: parseInt(req.query.salaryMax),
-      },
-    };
-  }
-
-  if (req.query.duration) {
-    findParams = {
-      ...findParams,
-      duration: {
-        $lt: parseInt(req.query.duration),
-      },
-    };
-  }
-
-  if (req.query.asc) {
-    if (Array.isArray(req.query.asc)) {
-      req.query.asc.map((key) => {
-        sortParams = {
-          ...sortParams,
-          [key]: 1,
-        };
-      });
-    } else {
-      sortParams = {
-        ...sortParams,
-        [req.query.asc]: 1,
-      };
-    }
-  }
-
-  if (req.query.desc) {
-    if (Array.isArray(req.query.desc)) {
-      req.query.desc.map((key) => {
-        sortParams = {
-          ...sortParams,
-          [key]: -1,
-        };
-      });
-    } else {
-      sortParams = {
-        ...sortParams,
-        [req.query.desc]: -1,
-      };
-    }
-  }
-
-  // console.log(findParams);
-  // console.log(sortParams);
-
-  // Job.find(findParams).collation({ locale: "en" }).sort(sortParams);
-  // .skip(skip)
-  // .limit(limit)
-
-  let arr = [
-    {
-      $lookup: {
-        from: "recruiterinfos",
-        localField: "userId",
-        foreignField: "userId",
-        as: "recruiter",
-      },
-    },
-    { $unwind: "$recruiter" },
-    { $match: findParams },
-  ];
-
-  if (Object.keys(sortParams).length > 0) {
-    arr = [
-      {
-        $lookup: {
-          from: "recruiterinfos",
-          localField: "userId",
-          foreignField: "userId",
-          as: "recruiter",
-        },
-      },
-      { $unwind: "$recruiter" },
-      { $match: findParams },
-      {
-        $sort: sortParams,
-      },
-    ];
-  }
-
-  // console.log(arr);
-
-  Job.aggregate(arr)
-    .then((posts) => {
-      if (posts == null) {
-        res.status(404).json({
-          message: "No job found",
-        });
-        return;
-      }
-      res.json(posts);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
 });
+
+//to update the details of jobs created by recruiter
+router.put("/jobs/:id",protect,async(req,res)=>{
+  const user=req.user;
+  const {id}=req.params;
+  try{
+       const job = await Job.findOne({ _id: id, userId: user._id });
+        if (!job) {
+      return res.status(404).json({ message: "Job not found or user not authorized to update this job" });
+    }
+
+    if (req.body.deadline) job.deadline = req.body.deadline;
+    if (req.body.maxApplicants) job.maxApplicants = req.body.maxApplicants;
+    if(req.body.maxPositions)job.maxPositions=req.body.maxPositions;
+     const updatedJob = await job.save();
+    res.json(updatedJob);
+  }
+  catch(error){
+    console.error(error);
+  }
+})
+
+
+//to delete the job created by recruiter
+
+router.delete("/jobs/:id",protect,async(req,res)=>{
+  const user=req.user;
+  const {id}=req.params;
+  try{
+    const job = await Job.findByIdAndDelete({ _id: id, userId: user._id });
+    if (!job) {
+      return res.status(404).json({ message: "Job not found or user not authorized to delete this job" });
+    }
+    // await job.remove();
+    res.json({ message: "Job removed" });
+  }
+  catch(error){
+    console.error(error);
+  }
+})
 
 //to get all the applications
 router.get("/user_applications",protect, (req, res) => {
