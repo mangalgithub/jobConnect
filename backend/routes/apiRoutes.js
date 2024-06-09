@@ -452,14 +452,11 @@ router.get("/users",protect, async (req, res) => {
   const user = req.user;
  try{
     const applications = await Application.find({ recruiterId: user._id });
-    // console.log(applications);
-  
     const userIds=applications.map((application)=>application.userId);
-    // console.log(userIds);
     const jobApplicants = await Profile.find({
          userId: { $in: userIds },
        });
-    console.log("jobapplicants",jobApplicants);
+    // console.log("jobapplicants",jobApplicants);
     res.json(jobApplicants);
   } catch (error) {
     console.error(error);
@@ -560,6 +557,17 @@ router.post("/apply/:id",protect, async (req, res) => {
 }
 );
 
-
+//get all applied jobs
+router.get("/applied_jobs",protect, async (req, res) => {
+  const user = req.user;
+  try {
+    const applications = await Application.find({ userId: user._id });
+    const jobIds = applications.map((application) => application.jobId);
+    const jobs = await Job.find({ _id: { $in: jobIds } });
+    res.json(jobs);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 module.exports=router;
