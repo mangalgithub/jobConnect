@@ -41,7 +41,7 @@ const Navbar = () => {
           ) : (
             <ul className="flex space-x-6">
               <li className="nav-item">
-                <Link to="/jobpage" className="nav-link">
+                <Link to="/browse" className="nav-link">
                   <h5>Browse</h5>
                 </Link>
               </li>
