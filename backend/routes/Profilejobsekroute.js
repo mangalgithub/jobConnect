@@ -4,5 +4,5 @@ const { protect } = require('../middleware/auth.js');
 const router = express.Router();
 
 
-router.route('/profile').post(saveUserProfile);
+router.route('/profile').post(protect,saveUserProfile);
 module.exports = router;

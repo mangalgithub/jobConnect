@@ -48,6 +48,7 @@ function ProfilePage() {
 
   const handleUpdateDetails = async () => {
     try {
+      const token=localStorage.getItem('token');
       const profilePhotoUrl = await uploadFile(profilePhoto, `profile_photos/${profilePhoto.name}`);
       const resumeUrl = await uploadFile(resume, `resumes/${resume.name}`);
 
@@ -60,7 +61,11 @@ function ProfilePage() {
         skills,
       };
 
-      await axios.post('http://localhost:5000/seeker/profile', userProfile);
+      await axios.post("http://localhost:5000/seeker/profile", userProfile, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
       toast.success('Details updated successfully');
     } catch (error) {

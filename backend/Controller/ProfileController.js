@@ -2,12 +2,13 @@ const Profile = require('../models/ProfileJobseeker.js');
 
 const saveUserProfile = async (req, res) => {
   const { name, email, resumeUrl, profilePhotoUrl, institutions, skills } = req.body;
-
+  const userId=req.user.id;
   try {
     // Create a new profile
     const profile = new Profile({
       name,
       email,
+      userId,
       resumeUrl,
       profilePhotoUrl,
       institutions,

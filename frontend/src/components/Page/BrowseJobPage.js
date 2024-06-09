@@ -69,7 +69,10 @@ const JobListings = () => {
     const handleSearchQuery = (event) => {
         setSearchQuery(event.target.value);
     };
-
+  
+    const handleApplyJob=()=>{
+        console.log("Apply Job")
+    }
     return (
         <div className="flex">
             <div className="w-3/4 p-4">

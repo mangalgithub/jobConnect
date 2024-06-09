@@ -520,10 +520,6 @@ router.delete("/jobs/:id",protect,async(req,res)=>{
 //to get all the applications
 router.get("/user_applications",protect, (req, res) => {
   const user = req.user;
-    // const user = {
-    //   userId: "665c021f4db04a48ac2532c9",
-    //   type: "jobseeker",
-    // };
       Application.find({userId:user.userId}).then((applications)=>{
           res.json(applications);
       }).catch((err)=>{

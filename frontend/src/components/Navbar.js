@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <nav className="navbar flex justify-between items-center shadow-sm px-10 py-4">
       <div className="logo">
-        <Link to="/" className="navbar-brand">
+        <Link to="/home" className="navbar-brand">
           <h3 className="font-bold">Online Job Portal</h3>
         </Link>
       </div>

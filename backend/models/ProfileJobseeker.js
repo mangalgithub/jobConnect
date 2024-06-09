@@ -5,25 +5,31 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
   },
   resumeUrl: {
-    type: String
+    type: String,
   },
   profilePhotoUrl: {
-    type: String
+    type: String,
   },
-  institutions: [{
-    name: String,
-    startYear: String,
-    endYear: String
-  }],
-  skills: [String]
+  institutions: [
+    {
+      name: String,
+      startYear: String,
+      endYear: String,
+    },
+  ],
+  skills: [String],
 });
 
 module.exports = mongoose.model('Profile', userSchema);
