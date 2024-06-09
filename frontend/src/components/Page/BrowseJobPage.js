@@ -70,9 +70,26 @@ const JobListings = () => {
         setSearchQuery(event.target.value);
     };
   
-    const handleApplyJob=()=>{
-        console.log("Apply Job")
-    }
+    const handleApplyJob = async (job) => {
+      try {
+        const token = localStorage.getItem("token");
+        // Ensure the URL matches the backend route and includes the job ID
+        await axios.post(
+          `http://localhost:5000/api/apply/${job._id}`,
+            {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Applied Successfully");
+        // toast.success('Applied Successfully');
+      } catch (error) {
+        console.error("Error applying job:", error);
+        // toast.error(`Error applying job: ${error.message}`);
+      }
+    };
     return (
         <div className="flex">
             <div className="w-3/4 p-4">
@@ -96,9 +113,9 @@ const JobListings = () => {
                                 <p className="text-gray-700 mb-1"><strong>Deadline:</strong> {new Date(job.deadline).toLocaleDateString()}</p>
                                 <p className="text-gray-700 mb-1"><strong>Skill Sets:</strong> {job.skillsets ? job.skillsets.join(', ') : 'N/A'}</p>
                             </div>
-                            <button className="absolute bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
+                        <button className="absolute bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded" onClick={()=>handleApplyJob(job)}>
                                 Apply
-                            </button>
+                        </button>
                         </div>
                     ))}
                 </div>

@@ -33,7 +33,7 @@ function ApplicantCard({applicant, onRatingChange}){
          <h2 className="text-xl font-semibold">{applicant.name}</h2>
          <p>{applicant.email}</p>
          <div className="flex flex-wrap">
-           {applicant.skills.map((skill, index) => (
+           {applicant && applicant.skills.map((skill, index) => (
              <span
                key={index}
                className="mr-2 mt-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -44,15 +44,15 @@ function ApplicantCard({applicant, onRatingChange}){
          </div>
          <div>
            <h3 className="mt-4 text-lg font-semibold">Education:</h3>
-           {applicant.education.map((edu, index) => (
+           {applicant && applicant.institutions.map((edu, index) => (
              <p key={index}>
-               {edu.institutionName} ({edu.startYear} -{" "}
+               {edu.name} ({edu.startYear} -{" "}
                {edu.endYear || "Present"})
              </p>
            ))}
          </div>
          <a
-           href={applicant.resume}
+           href={applicant.resumeUrl}
            className="inline-block mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
            download
          >

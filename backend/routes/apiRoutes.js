@@ -8,6 +8,7 @@ const Rating=require('../models/Rating');
 const Application=require('../models/Application');
 const Job=require('../models/Job');
 const User=require('../models/User');
+const Profile=require('../models/ProfileJobseeker');
 const router=express.Router();
 
 //Need to add jwtAuth middleware in /user route***
@@ -455,10 +456,10 @@ router.get("/users",protect, async (req, res) => {
   
     const userIds=applications.map((application)=>application.userId);
     // console.log(userIds);
-    const jobApplicants = await JobApplicant.find({
+    const jobApplicants = await Profile.find({
          userId: { $in: userIds },
        });
-    // console.log("jobapplicants",jobApplicants);
+    console.log("jobapplicants",jobApplicants);
     res.json(jobApplicants);
   } catch (error) {
     console.error(error);
@@ -535,6 +536,30 @@ router.get("/jobseekers",(req,res)=>{
         res.status(400).json(err);
     });
 })
+
+//apply for a job
+router.post("/apply/:id",protect, async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  console.log("id",id);
+  try {
+    const job = await Job.findById(id);
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+    const application = new Application({
+      userId: user._id,
+      jobId: job._id,
+      recruiterId: job.userId,
+    });
+    await application.save();
+    res.json(application);
+  } catch (error) {
+    console.error(error);
+  }
+}
+);
+
 
 
 module.exports=router;
