@@ -34,7 +34,7 @@ export default function Login() {
       localStorage.setItem("userType", response.data.type); // Assuming response.data.userType exists
 
       navigate("/home");
-
+      window.location.reload();
       toast.success(response.data.message);
     } catch (error) {
       console.log(error);
