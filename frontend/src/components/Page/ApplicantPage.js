@@ -1,26 +1,5 @@
 import React, { useState,useEffect } from 'react';
 
-const initialApplicants = [
-  {
-    name: 'John Doe',
-    education: 'B.S. in Computer Science',
-    skills: ['JavaScript', 'React', 'Node.js'],
-    email: 'john.doe@example.com',
-    resume: '/path/to/resume.pdf',
-    photo: 'https://randomuser.me/api/portraits/men/32.jpg',
-    rating: 0
-  },
-  {
-    name: 'Jane Smith',
-    education: 'M.S. in Software Engineering',
-    skills: ['Python', 'Django', 'Machine Learning'],
-    email: 'jane.smith@example.com',
-    resume: '/path/to/resume.pdf',
-    photo: 'https://randomuser.me/api/portraits/women/44.jpg',
-    rating: 0
-  }
-  // Add more applicants as needed
-];
 
 function ApplicantCard({applicant, onRatingChange}){
    const handleRatingChange = (newRating) => {

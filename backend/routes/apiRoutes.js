@@ -9,6 +9,7 @@ const Application=require('../models/Application');
 const Job=require('../models/Job');
 const User=require('../models/User');
 const Profile=require('../models/ProfileJobseeker');
+const JobNotification=require('../models/JobNotification');
 const router=express.Router();
 
 //Need to add jwtAuth middleware in /user route***
@@ -570,4 +571,15 @@ router.get("/applied_jobs",protect, async (req, res) => {
   }
 });
 
+
+//get all the notifications
+router.get("/notifications",protect, async (req, res) => {
+  const user = req.user;
+  try {
+    const notifications = await JobNotification.find({ jobSeekerId: user._id });
+    res.json(notifications);
+  } catch (error) {
+    console.error(error);
+  }
+});
 module.exports=router;

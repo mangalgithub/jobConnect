@@ -1,12 +1,23 @@
-const asyncHandler = require('express-async-handler');
-const {Job} = require('../models/AddJob.js'); // Ensure this path is correct
-const { user } = require('../models/User.js');
-
+const asyncHandler = require("express-async-handler");
+const { Job } = require("../models/AddJob.js"); // Ensure this path is correct
+const User = require("../models/User.js");
+const JobNotification = require("../models/JobNotification.js");
+console.log("User detail ",User);
 const addJob = asyncHandler(async (req, res) => {
-  const { title, skillsets, jobType, duration, salary, deadline, maxApplicants, maxPositions } = req.body;
+  const {
+    title,
+    skillsets,
+    jobType,
+    duration,
+    salary,
+    deadline,
+    maxApplicants,
+    maxPositions,
+    userId,
+  } = req.body;
 
   if (!title || !skillsets || !jobType || !salary || !deadline) {
-    res.status(400).json({ message: 'All fields are required' });
+    res.status(400).json({ message: "All fields are required" });
     return;
   }
 
@@ -20,8 +31,15 @@ const addJob = asyncHandler(async (req, res) => {
       deadline,
       maxApplicants,
       maxPositions,
-      userId: req.user._id, 
+      userId: req.user._id,
     });
+    const jobSeekers = await User.find({type:'jobseeker'}); // Retrieve all job seekers from the users model
+    const notifications = jobSeekers.map(jobSeeker => ({
+      jobId: createdJob._id,
+      recruiterId: req.user._id,
+      jobSeekerId: jobSeeker._id, 
+    }));
+    await JobNotification.insertMany(notifications);
 
     res.status(201).json(createdJob);
   } catch (error) {
@@ -30,5 +48,5 @@ const addJob = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  addJob
+  addJob,
 };

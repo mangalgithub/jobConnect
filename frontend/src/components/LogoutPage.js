@@ -17,6 +17,7 @@ export default function LogoutPage() {
       // Navigate to login page
       navigate("/");
       console.log("Logout")
+      window.location.reload();
     };
 
     logout();

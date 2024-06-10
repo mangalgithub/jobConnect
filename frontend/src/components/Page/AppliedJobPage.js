@@ -1,33 +1,7 @@
 import React ,{useState,useEffect} from 'react';
-import axios from 'axios';
 
 function AppliedJobsPage() {
-  const appliedJobs = [
-    {
-      id: 1,
-      companyName: 'Tech Company',
-      postedBy: 'John Doe',
-      role: 'Software Engineer',
-      appliedDate: '2024-05-01',
-      duration: '6 months',
-    },
-    {
-      id: 2,
-      companyName: 'Creative Agency',
-      postedBy: 'Jane Smith',
-      role: 'UX Designer',
-      appliedDate: '2024-04-15',
-      duration: '3 months',
-    },
-    {
-      id: 3,
-      companyName: 'Global Corp',
-      postedBy: 'Robert Brown',
-      role: 'Marketing Specialist',
-      appliedDate: '2024-06-01',
-      duration: '12 months',
-    },
-  ];
+ 
   const [jobs,setJobs]=useState([]);
   const handleFetchAppliedJobs=async()=>{
              try {

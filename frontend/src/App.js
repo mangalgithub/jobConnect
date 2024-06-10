@@ -13,6 +13,7 @@ import ProfilePage from "./components/Page/ProfilePage";
 import ApplicantPage from "./components/Page/ApplicantPage";
 import LogoutPage from "./components/LogoutPage";
 import JobListings from "./components/Page/BrowseJobPage";
+import Notification from "./components/Page/Notification";
 function App() {
   return (
     <div>
@@ -33,7 +34,8 @@ function App() {
           <Route path="/jobpage" element={<JobSearchPage/>}/>
           <Route path="/logout" element={<LogoutPage/>}/>
           <Route path="/jobpage" element={<JobSearchPage/>}/>
-        <Route path="/browse" element={<JobListings/>}/>
+          <Route path="/browse" element={<JobListings/>}/>
+         <Route path="/notification" element={<Notification/>}/>
         </Routes>
       </Router>
     </div>
