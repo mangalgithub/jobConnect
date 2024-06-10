@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase/firebase'; // Adjust the import path as necessary
+import { storage } from '../firebase/firebase';
 import toast, { Toaster } from 'react-hot-toast';
 
 function ProfilePage() {

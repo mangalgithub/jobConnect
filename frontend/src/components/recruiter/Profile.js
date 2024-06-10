@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import axios from "axios";
 import "react-phone-input-2/lib/material.css";
+import toast, { Toaster } from "react-hot-toast";
 
 const Profile = (props) => {
 //   const setPopup = useContext(SetPopupContext);
@@ -12,7 +13,7 @@ const Profile = (props) => {
     contactNumber: "+1234567890",
   });
 
-  const [phone, setPhone] = useState("+1234567890"); // Set to a dummy phone number
+  const [phone, setPhone] = useState("+1234567890");
 
   const handleInput = (key, value) => {
     setProfileDetails({
@@ -20,39 +21,6 @@ const Profile = (props) => {
       [key]: value,
     });
   };
-
-  // const handleUpdate = async() => {
-  //   let updatedDetails = {
-  //     ...profileDetails,
-  //   };
-  //   if (phone !== "") {
-  //     updatedDetails = {
-  //       ...profileDetails,
-  //       contactNumber: `+${phone}`,
-  //     };
-  //   } else {
-  //     updatedDetails = {
-  //       ...profileDetails,
-  //       contactNumber: "",
-  //     };
-  //   }
-
-  //   // Simulating success message
-  //   // setPopup({
-  //   //   open: true,
-  //   //   severity: "success",
-  //   //   message: "Profile details updated successfully!",
-  //   // });
-
-  //   // Simulating loading state
-  //   setLoading(true);
-
-  //   // Simulating delay before updating state
-  //   setTimeout(() => {
-  //     setProfileDetails(updatedDetails);
-  //     setLoading(false);
-  //   }, 1500);
-  // };
 
   const handleUpdate=async()=>{
     try{
@@ -66,23 +34,23 @@ const Profile = (props) => {
         {
           headers: {
             "Content-Type": "application/json",
-            // "x-auth-token":localStorage.getItem("token")
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(response.data);
-      // toast.success("Profile updated successfully!");
+      // console.log(response.data);
+      toast.success("Profile updated successfully!");
 
     }
     catch(error){
-      console.error("Error updating profile:",error);
-      // toast.error("Error updating profile. Please try again.");
+      // console.error("Error updating profile:",error);
+      toast.error("Error updating profile. Please try again.");
   }
   }
 
   return (
-    <>
+    <>  
+    <Toaster />
         <div className="flex flex-col items-center p-4">
           <h1 className="border-b font-bold text-xl mt-4">Profile</h1>
           <div className="w-3/4 mt-4 bg-white border rounded-lg shadow-lg p-4">

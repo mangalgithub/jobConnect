@@ -7,17 +7,16 @@ const Notification = () => {
        fetch(
          `http://localhost:5000/api/notifications/${notificationId}/markAsRead`,
          {
-           method: "PUT", // Assuming the endpoint requires a PUT request to update
+           method: "PUT",
            headers: {
              Authorization: `Bearer ${token}`,
              "Content-Type": "application/json",
            },
-           body: JSON.stringify({ isRead: true }), // Assuming the backend expects a JSON body with the new isRead status
+           body: JSON.stringify({ isRead: true }),
          }
        )
          .then((response) => {
            if (response.ok) {
-             // Update the local state to reflect the change
              setNotifications(
                notifications.map((notification) => {
                  console.log("notifications", notification._id, notificationId);
@@ -78,7 +77,7 @@ const Notification = () => {
                   !notification.isRead && markAsRead(notification.jobDetail._id)
                 }
                 style={{
-                  backgroundColor: notification.isRead ? "#4CAF50" : "#f44336", // Green for read, Red for not read
+                  backgroundColor: notification.isRead ? "#4CAF50" : "#f44336",
                   color: "white",
                   padding: "10px 20px",
                   border: "none",
@@ -87,7 +86,7 @@ const Notification = () => {
                 }}
                 disabled={notification.isRead}
               >
-                {notification.isRead ? "Read" : "Not Read"}
+                {notification.isRead ? "Readed" : "New Message"}
               </button>
             </div>
           </div>

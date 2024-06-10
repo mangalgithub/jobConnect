@@ -205,54 +205,12 @@ const JobTile = (props) => {
               aria-modal="true"
               aria-labelledby="modal-headline"
             >
-              {/* <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h4 className="text-xl mb-4">Update Details</h4>
-                <div className="flex flex-col space-y-4">
-                  <input
-                    type="datetime-local"
-                    // value={jobDetails.deadline.substr(0, 16)}
-                    onChange={(e) => handleInput("deadline", e.target.value)}
-                    className="px-4 py-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    value={jobDetails.maxApplicants}
-                    onChange={(e) =>
-                      handleInput("maxApplicants", e.target.value)
-                    }
-                    min="1"
-                    className="px-4 py-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    value={jobDetails.maxPositions}
-                    onChange={(e) =>
-                      handleInput("maxPositions", e.target.value)
-                    }
-                    min="1"
-                    className="px-4 py-2 border rounded"
-                  />
-                  <div className="flex justify-between">
-                    <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleUpdate}>
-                      Update
-                    </button>
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
-                      onClick={handleCloseUpdate}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div> */}
 
               <div className="bg-white p-8 rounded-lg shadow-lg">
                 <h4 className="text-xl mb-4">Update Details</h4>
                 <div className="flex flex-col space-y-4">
                   <input
                     type="datetime-local"
-                    // Uncomment and use the value when not loading
-                    // value={!isLoading ? jobDetails.deadline.substr(0, 16) : ''}
                     onChange={(e) => handleInput("deadline", e.target.value)}
                     className="px-4 py-2 border rounded"
                     disabled={isLoading} // Disable input when loading
@@ -289,7 +247,7 @@ const JobTile = (props) => {
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded"
                       onClick={handleCloseUpdate}
-                      disabled={isLoading} // Optionally disable cancel button when loading
+                      disabled={isLoading}
                     >
                       Cancel
                     </button>
@@ -392,13 +350,6 @@ const FilterPopup = (props) => {
               </div>
               <div className="flex items-center">
                 <span className="w-1/4">Salary</span>
-                {/* <Slider
-              value={searchOptions.salary}
-              onChange={(value) =>
-                setSearchOptions({ ...searchOptions, salary: value })
-              }
-              className="w-3/4"
-            /> */}
               </div>
               <div className="flex items-center">
                 <span className="w-1/4">Duration</span>
@@ -445,8 +396,6 @@ const JobListing = () => {
   });
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  
-//   const setPopup = useContext(SetPopupContext);
 
 useEffect(()=>{
  try{

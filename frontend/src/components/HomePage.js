@@ -9,10 +9,16 @@ function HomePage() {
         <div className="flex justify-between items-center mb-4">
           <div></div>
           <div>
-            <Link to="/" className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 mr-2">
+            <Link
+              to="/"
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 mr-2"
+            >
               Login
             </Link>
-            <Link to="/login" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
               Sign Up
             </Link>
           </div>
@@ -26,17 +32,20 @@ function HomePage() {
               Welcome to Our Platform
             </h1>
             <p className="text-gray-700 mb-4">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of type
-              and scrambled it to make a type specimen book. It has survived not
-              only five centuries, but also the leap into electronic typesetting,
-              remaining essentially unchanged. It was popularised in the 1960s
-              with the release of Letraset sheets containing Lorem Ipsum passages,
-              and more recently with desktop publishing software like Aldus
-              PageMaker including versions of Lorem Ipsum.
+              Discover your next career opportunity with us. Explore a wide
+              range of job listings, receive personalized job recommendations,
+              and gain access to resources that will help you stand out to
+              potential employers. Our platform goes beyond the traditional job
+              search. With advanced filtering options and machine learning
+              algorithms, we tailor your job search to match your skills,
+              experiences, and career aspirations. Say goodbye to endless
+              scrolling through irrelevant listings. With us, you're one step
+              closer to finding a job that truly fits.
             </p>
-            <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            >
               Sign Up to Browse Jobs
             </Link>
           </div>
@@ -56,7 +65,7 @@ function HomePage() {
           <h2 className="text-2xl font-semibold mb-6 text-center">
             What Students Say About Us
           </h2>
-          <div className="space-y-8 mx-auto" style={{ maxWidth: '800px' }}>
+          <div className="space-y-8 mx-auto" style={{ maxWidth: "800px" }}>
             {[
               {
                 text: "This platform has been a game-changer for my career. The resources and support provided have helped me land my dream job in the tech industry. I can't thank the team enough!",
@@ -101,7 +110,10 @@ function HomePage() {
                 imgFirst: true,
               },
             ].map((testimonial, index) => (
-              <div className="flex flex-col md:flex-row items-center" key={index}>
+              <div
+                className="flex flex-col md:flex-row items-center"
+                key={index}
+              >
                 {testimonial.imgFirst ? (
                   <>
                     <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">

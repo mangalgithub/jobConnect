@@ -6,8 +6,7 @@ function HomePage() {
     <div className="bg-gray-100">
       <div className="container mx-auto py-8 px-4">
         {/* Navigation */}
-        <div className="flex justify-between items-center mb-4">
-        </div>
+        <div className="flex justify-between items-center mb-4"></div>
 
         {/* Content */}
         <div className="flex flex-col md:flex-row items-center">
@@ -17,35 +16,37 @@ function HomePage() {
               Welcome to Our Platform
             </h1>
             <p className="text-gray-700 mb-4">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of type
-              and scrambled it to make a type specimen book. It has survived not
-              only five centuries, but also the leap into electronic typesetting,
-              remaining essentially unchanged. It was popularised in the 1960s
-              with the release of Letraset sheets containing Lorem Ipsum passages,
-              and more recently with desktop publishing software like Aldus
-              PageMaker including versions of Lorem Ipsum.
+              Our mission is to streamline the recruitment process, making it
+              more efficient, transparent, and successful for both candidates
+              and employers. Find your next star employee with ease. Leverage
+              our extensive talent network, utilize our targeted recruitment
+              strategies, and benefit from our expert advice on building a
+              winning team.
             </p>
-            {isAuth?(
+            {isAuth ? (
               userType() === "recruiter" ? (
-                <Link to="/addjobs" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                <Link
+                  to="/addjobs"
+                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                >
                   Add Jobs
                 </Link>
               ) : (
-                <Link to="/jobpage" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                <Link
+                  to="/jobpage"
+                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                >
                   Browse Jobs
                 </Link>
               )
-            ):(
-              <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              >
                 Login to Browse Jobs
               </Link>
-            
             )}
-            {/* <Link to="/login" className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-              Login to Browse Jobs
-            </Link> */}
           </div>
 
           {/* Photo */}
@@ -63,7 +64,7 @@ function HomePage() {
           <h2 className="text-2xl font-semibold mb-6 text-center">
             What Students Say About Us
           </h2>
-          <div className="space-y-8 mx-auto" style={{ maxWidth: '800px' }}>
+          <div className="space-y-8 mx-auto" style={{ maxWidth: "800px" }}>
             {[
               {
                 text: "This platform has been a game-changer for my career. The resources and support provided have helped me land my dream job in the tech industry. I can't thank the team enough!",
@@ -108,7 +109,10 @@ function HomePage() {
                 imgFirst: true,
               },
             ].map((testimonial, index) => (
-              <div className="flex flex-col md:flex-row items-center" key={index}>
+              <div
+                className="flex flex-col md:flex-row items-center"
+                key={index}
+              >
                 {testimonial.imgFirst ? (
                   <>
                     <div className="md:w-1/2 text-center md:text-left order-2 md:order-1">

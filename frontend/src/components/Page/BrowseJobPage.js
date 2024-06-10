@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+import toast, { Toaster } from "react-hot-toast";
 const JobListings = () => {
     const [jobs, setJobs] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);
@@ -19,7 +19,7 @@ const JobListings = () => {
             .catch(error => {
                 console.error('Error fetching job data:', error);
             });
-    }, []); // Empty dependency array to run the effect only once on component mount
+    }, []);
 
      const handleFetchAppliedJobs = async () => {
        try {
@@ -98,7 +98,6 @@ const JobListings = () => {
         console.log("Applying job:", job);
       try {
         const token = localStorage.getItem("token");
-        // Ensure the URL matches the backend route and includes the job ID
         await axios.post(
           `http://localhost:5000/api/apply/${job._id}`,
             {},
@@ -108,15 +107,16 @@ const JobListings = () => {
             },
           }
         );
-        console.log("Applied Successfully");
-        // toast.success('Applied Successfully');
+        // console.log("Applied Successfully");
+        toast.success("Applied Successfully"); 
       } catch (error) {
-        console.error("Error applying job:", error);
-        // toast.error(`Error applying job: ${error.message}`);
+        // console.error("Error applying job:", error);
+        toast.error(`Error applying job: ${error.message}`);
       }
     };
     return (
       <div className="flex">
+         <Toaster/>
         <div className="w-3/4 p-4">
           <h1 className="text-3xl font-bold mb-6">Job Listings</h1>
           <input

@@ -10,11 +10,6 @@ export default function LogoutPage() {
       // Clear token from localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("userType");
-
-      // Remove Authorization header from axios defaults
-     // delete axios.defaults.headers.common["Authorization"];
-
-      // Navigate to login page
       navigate("/");
       console.log("Logout")
       window.location.reload();

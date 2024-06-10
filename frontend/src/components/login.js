@@ -24,14 +24,14 @@ export default function Login() {
           },
         }
       );
-      console.log("response", response.data); // Handle the response as needed
+      // console.log("response", response.data);
       
-      // Set token in Authorization header
-            console.log("token", response.data.token);
+           // Set token in Authorization header
+            // console.log("token", response.data.token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userType", response.data.type); // Assuming response.data.userType exists
+      localStorage.setItem("userType", response.data.type);
 
       navigate("/home");
       window.location.reload();

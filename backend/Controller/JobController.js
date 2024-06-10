@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { Job } = require("../models/AddJob.js"); // Ensure this path is correct
+const { Job } = require("../models/AddJob.js");
 const User = require("../models/User.js");
 const JobNotification = require("../models/JobNotification.js");
 console.log("User detail ",User);

@@ -24,12 +24,11 @@ const AddJobs = () => {
 
   const handleUpdate = async () => {
     try {
-      const token = localStorage.getItem('token'); // Get the token from localStorage or your preferred method
-
+      const token = localStorage.getItem('token');
       const response = await axios.post("http://localhost:5000/apps/jobs", jobDetails, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include the token in the Authorization header
+          "Authorization": `Bearer ${token}`
         },
       });
       if (response.status === 201) {
@@ -46,7 +45,7 @@ const AddJobs = () => {
         });
       }
     } catch (error) {
-      console.error("Error adding job:", error);
+      // console.error("Error adding job:", error);
       toast.error("Failed to add job. Please try again.");
     }
   };
