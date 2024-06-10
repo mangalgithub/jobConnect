@@ -574,12 +574,45 @@ router.get("/applied_jobs",protect, async (req, res) => {
 
 //get all the notifications
 router.get("/notifications",protect, async (req, res) => {
+const user = req.user;
+try {
+  const notifications = await JobNotification.find({ jobSeekerId: user._id }).sort({ createdAt: -1 });
+
+  const jobDetails = await Promise.all(
+    notifications.map(async (notification) => {
+      const jobDetail = await Job.findOne({ _id: notification.jobId }); // Fetch job details using jobId
+      return {
+         jobDetail,
+         isRead: notification.isRead,
+      } 
+    })
+  );
+  res.json(jobDetails); // Send jobDetails as the response
+} catch (error) {
+  console.error(error);
+  res.status(500).send("An error occurred while fetching job details.");
+}
+});
+
+//to update the read status of notification
+router.put("/notifications/:id/markAsRead",protect, async (req, res) => {
   const user = req.user;
+  const { id } = req.params;
   try {
-    const notifications = await JobNotification.find({ jobSeekerId: user._id });
+    const notifications = await JobNotification.findOne({
+      jobSeekerId: user._id,
+      jobId: id,
+    });
+    if (!notifications) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+    notifications.isRead = true;
+    await notifications.save();
     res.json(notifications);
+
   } catch (error) {
     console.error(error);
+    res.status(500).send("An error occurred while updating notification status.");
   }
 });
 module.exports=router;

@@ -12,6 +12,14 @@ const jobNotificationSchema = new mongoose.Schema({
     jobSeekerId: {
         type: String,
         required: true
+    },
+    isRead: {
+        type: Boolean,
+        default: false
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

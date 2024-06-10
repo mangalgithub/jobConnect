@@ -38,6 +38,7 @@ const addJob = asyncHandler(async (req, res) => {
       jobId: createdJob._id,
       recruiterId: req.user._id,
       jobSeekerId: jobSeeker._id, 
+      isRead: false,
     }));
     await JobNotification.insertMany(notifications);
 

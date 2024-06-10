@@ -81,7 +81,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
       type: user.type,
       pic: user.pic,
       token: token,
-      message: "Login successful"
+      message: "Login successful",
     });
   } catch (error) {
     next(error);
