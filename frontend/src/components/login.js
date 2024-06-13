@@ -32,7 +32,7 @@ export default function Login() {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userType", response.data.type);
-
+      localStorage.setItem("userId", response.data._id);
       navigate("/home");
       window.location.reload();
       toast.success(response.data.message);
