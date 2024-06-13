@@ -39,7 +39,16 @@ const JobListings = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/alljob/jobs");
+                // const response = await axios.get("http://localhost:5000/alljob/jobs");
+                 const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+                 const response = await axios.get(
+                   "http://localhost:5000/alljob/jobs",
+                   {
+                     headers: {
+                       Authorization: `Bearer ${token}`, // Include the token in the request headers
+                     },
+                   }
+                 );
                 setJobs(response.data);
                 console.log("All jobs",jobs)
                 handleFetchAppliedJobs(); // Fetch applied jobs after setting jobs
