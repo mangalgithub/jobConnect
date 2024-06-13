@@ -1,22 +1,18 @@
 import React ,{useState,useEffect} from 'react';
-
+import axios from 'axios';
 function AppliedJobsPage() {
  
   const [jobs,setJobs]=useState([]);
   const handleFetchAppliedJobs=async()=>{
              try {
                const token = localStorage.getItem("token");
-               const response = await fetch(
-                 "http://localhost:5000/api/applied_jobs",
-                 {
-                   method: "GET",
-                   headers: {
-                     "Content-Type": "application/json",
-                     Authorization: `Bearer ${token}`,
-                   },
-                 }
-               );
-                const data = await response.json();
+               const response = await axios.get("http://localhost:5000/api/applied_jobs", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+                const data =  response.data;
                console.log("applied jobs", data);
                setJobs(data);
              } catch (error) {
