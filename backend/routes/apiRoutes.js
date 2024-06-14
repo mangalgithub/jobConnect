@@ -1,15 +1,15 @@
 const express=require('express');
 const mongoose=require('mongoose');
 const jwtAuth=require('../lib/jwtAuth');
-const {protect}=require('../middleware/auth');
-const JobApplicant=require('../models/JobApplicant');
-const Recruiter=require('../models/Recruiter');
-const Rating=require('../models/Rating');
-const Application=require('../models/Application');
-const Job=require('../models/Job');
-const User=require('../models/User');
-const Profile=require('../models/ProfileJobseeker');
-const JobNotification=require('../models/JobNotification');
+const {protect}=require('../middleware/auth.js');
+const JobApplicant=require('../models/JobApplicant.js');
+const Recruiter=require('../models/Recruiter.js');
+const Rating=require('../models/Rating.js');
+const Application=require('../models/Application.js');
+const Job=require('../models/Job.js');
+const User=require('../models/User.js');
+const Profile=require('../models/ProfileJobseeker.js');
+const JobNotification=require('../models/JobNotification.js');
 const router=express.Router();
 
 //Need to add jwtAuth middleware in /user route***
