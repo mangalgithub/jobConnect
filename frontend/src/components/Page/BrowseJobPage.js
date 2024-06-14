@@ -17,7 +17,7 @@ const JobListings = () => {
         try {
             const token = localStorage.getItem("token");
             const userId = localStorage.getItem("userId");
-           // const email = localStorage.getItem("userEmail");
+           const email = localStorage.getItem("userEmail");
             if (userId) {
                 setCurrentUserId(userId);
                 setUserEmail(email);
