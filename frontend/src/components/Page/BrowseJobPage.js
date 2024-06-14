@@ -10,14 +10,17 @@ const JobListings = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [appliedJobs, setAppliedJobs] = useState([]);
     const [currentUserId, setCurrentUserId] = useState("");
+    const [userEmail, setUserEmail] = useState("");
 
     // Function to fetch applied jobs
     const handleFetchAppliedJobs = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
             const userId = localStorage.getItem("userId");
+           // const email = localStorage.getItem("userEmail");
             if (userId) {
                 setCurrentUserId(userId);
+                setUserEmail(email);
             }
             const response = await axios.get("http://localhost:5000/api/applied_jobs", {
                 headers: {
@@ -34,11 +37,13 @@ const JobListings = () => {
             console.error("Error fetching applied jobs:", error);
         }
     }, []);
-
+    const token = localStorage.getItem('token'); 
     // Fetch job data from backend and applied jobs on initial load
     useEffect(() => {
         const fetchJobs = async () => {
             try {
+
+             
                 // const response = await axios.get("http://localhost:5000/alljob/jobs");
                  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
                  const response = await axios.get(
@@ -49,12 +54,13 @@ const JobListings = () => {
                      },
                    }
                  );
+
                 setJobs(response.data);
-                console.log("All jobs",jobs)
+                console.log("All jobs", response.data);
                 handleFetchAppliedJobs(); // Fetch applied jobs after setting jobs
-            } catch (error) {
+              } catch (error) {
                 console.error('Error fetching job data:', error);
-            }
+              }
         };
 
         fetchJobs();
@@ -91,10 +97,6 @@ const JobListings = () => {
   
       filterJobs();
   }, [jobs, appliedJobs, jobTypeFilter, salarySort, searchQuery]);
-  
-    // useEffect(() => {
-    //     filterJobs();
-    // }, [jobTypeFilter, salarySort, searchQuery, filterJobs]);
 
     // Function to handle job type filter
     const handleJobTypeFilter = (type) => {
@@ -115,6 +117,21 @@ const JobListings = () => {
     const handleApplyJob = async (job) => {
         try {
             const token = localStorage.getItem("token");
+            const emailId=localStorage.getItem("emailId");
+            await axios.post(
+                "http://localhost:5000/email/send-email",
+                {
+                    userEmail: emailId,
+                    jobTitle: job.title,
+                    jobSalary: job.salary,
+                    jobDuration: job.duration // Or any other duration field if available
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             await axios.post(
                 `http://localhost:5000/api/apply/${job._id}`,
                 {},
@@ -124,7 +141,10 @@ const JobListings = () => {
                     },
                 }
             );
-            toast.success("Applied Successfully");
+            // Send email
+           
+        
+            toast.success("Applied and Email sent Successfully");
             // Update the appliedJobs state
             setAppliedJobs([...appliedJobs, job]);
         } catch (error) {
@@ -241,4 +261,3 @@ const JobListings = () => {
 };
 
 export default JobListings;
-

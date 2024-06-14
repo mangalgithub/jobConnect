@@ -10,6 +10,8 @@ export default function LogoutPage() {
       // Clear token from localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("userType");
+      localStorage.removeItem("emailId");
+      localStorage.removeItem("userId");
       navigate("/");
       console.log("Logout")
       window.location.reload();

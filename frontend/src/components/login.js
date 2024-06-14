@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -24,15 +24,22 @@ export default function Login() {
           },
         }
       );
-      // console.log("response", response.data);
+
+      // Log the response
+      console.log("response", response.data);
       
-           // Set token in Authorization header
-            // console.log("token", response.data.token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      // Set token in Authorization header
+      console.log("token", response.data.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userType", response.data.type);
       localStorage.setItem("userId", response.data._id);
+      localStorage.setItem("emailId", response.data.email);
+
+      // Confirm the token is set in local storage
+      console.log("Token set in localStorage:", localStorage.getItem("token"));
+      
       navigate("/home");
       window.location.reload();
       toast.success(response.data.message);
