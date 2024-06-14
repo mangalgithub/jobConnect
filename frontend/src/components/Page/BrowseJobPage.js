@@ -42,11 +42,19 @@ const JobListings = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/alljob/jobs", {
-                  headers: {
-                    'Authorization': `Bearer ${token}` // Set the token in the headers
-                  }
-                });
+
+             
+                // const response = await axios.get("http://localhost:5000/alljob/jobs");
+                 const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+                 const response = await axios.get(
+                   "http://localhost:5000/alljob/jobs",
+                   {
+                     headers: {
+                       Authorization: `Bearer ${token}`, // Include the token in the request headers
+                     },
+                   }
+                 );
+
                 setJobs(response.data);
                 console.log("All jobs", response.data);
                 handleFetchAppliedJobs(); // Fetch applied jobs after setting jobs
@@ -110,17 +118,6 @@ const JobListings = () => {
         try {
             const token = localStorage.getItem("token");
             const emailId=localStorage.getItem("emailId");
-           
-            await axios.post(
-                `http://localhost:5000/api/apply/${job._id}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            // Send email
             await axios.post(
                 "http://localhost:5000/email/send-email",
                 {
@@ -135,6 +132,17 @@ const JobListings = () => {
                     },
                 }
             );
+            await axios.post(
+                `http://localhost:5000/api/apply/${job._id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // Send email
+           
         
             toast.success("Applied and Email sent Successfully");
             // Update the appliedJobs state
