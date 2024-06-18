@@ -12,6 +12,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+       console.log("backend url ",process.env.REACT_APP_BACKEND_URL);
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/user/login`,
         {
