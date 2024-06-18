@@ -26,7 +26,7 @@ const Profile = (props) => {
     try{
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        "http://localhost:5000/api/profile_update",
+        `${process.env.REACT_APP_BACKEND_URL}/api/profile_update`,
         {
           name: profileDetails.name,
           email: profileDetails.email,

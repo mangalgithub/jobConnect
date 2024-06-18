@@ -5,7 +5,7 @@ const Notification = () => {
      const markAsRead = (notificationId) => {
        const token = localStorage.getItem("token");
        fetch(
-         `http://localhost:5000/api/notifications/${notificationId}/markAsRead`,
+         `${process.env.REACT_APP_BACKEND_URL}/api/notifications/${notificationId}/markAsRead`,
          {
            method: "PUT",
            headers: {
@@ -32,14 +32,14 @@ const Notification = () => {
      };
     useEffect(() => {
         const token=localStorage.getItem("token");
-        fetch("http://localhost:5000/api/notifications",{
-            headers:{
-                'Authorization':`Bearer ${token}`
-            }
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/notifications`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
-            .then(response => response.json())
-            .then(data => setNotifications(data))
-            .catch(error => console.log(error));
+          .then((response) => response.json())
+          .then((data) => setNotifications(data))
+          .catch((error) => console.log(error));
 
             console.log(notifications);
     }, []);

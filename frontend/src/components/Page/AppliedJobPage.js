@@ -6,12 +6,15 @@ function AppliedJobsPage() {
   const handleFetchAppliedJobs=async()=>{
              try {
                const token = localStorage.getItem("token");
-               const response = await axios.get("http://localhost:5000/api/applied_jobs", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+               const response = await axios.get(
+                 `${process.env.REACT_APP_BACKEND_URL}/api/applied_jobs`,
+                 {
+                   headers: {
+                     "Content-Type": "application/json",
+                     Authorization: `Bearer ${token}`,
+                   },
+                 }
+               );
                 const data =  response.data;
                console.log("applied jobs", data);
                setJobs(data);

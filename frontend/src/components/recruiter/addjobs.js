@@ -25,12 +25,16 @@ const AddJobs = () => {
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:5000/apps/jobs", jobDetails, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/apps/jobs`,
+        jobDetails,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.status === 201) {
         toast.success("Job added successfully!");
         setJobDetails({

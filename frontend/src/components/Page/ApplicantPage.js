@@ -1,6 +1,4 @@
 import React, { useState,useEffect } from 'react';
-
-
 function ApplicantCard({applicant, onRatingChange}){
    const handleRatingChange = (newRating) => {
      onRatingChange(applicant.email, newRating);
@@ -64,11 +62,12 @@ function ApplicantPage() {
   // const [applicants, setApplicants] = useState(initialApplicants);
 
    const [applicants, setApplicants] = useState([]);
+   console.log(process.env.REACT_APP_BACKEND_URL);
      useEffect(() => {
        const fetchApplicants = async () => {
          try {
            const token = localStorage.getItem("token");
-           const response = await fetch("http://localhost:5000/api/users", {
+           const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users`, {
              method: "GET",
              headers: {
                "Content-Type": "application/json",

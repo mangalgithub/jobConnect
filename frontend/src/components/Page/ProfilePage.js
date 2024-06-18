@@ -61,11 +61,15 @@ function ProfilePage() {
         skills,
       };
 
-      await axios.post("http://localhost:5000/seeker/profile", userProfile, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/seeker/profile`,
+        userProfile,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success('Details updated successfully');
     } catch (error) {

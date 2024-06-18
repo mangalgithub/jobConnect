@@ -22,12 +22,15 @@ const JobListings = () => {
                 setCurrentUserId(userId);
                 setUserEmail(email);
             }
-            const response = await axios.get("http://localhost:5000/api/applied_jobs", {
+            const response = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}/api/applied_jobs`,
+              {
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
                 },
-            });
+              }
+            );
 
             const data = response.data;
             console.log(data);
@@ -42,12 +45,9 @@ const JobListings = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-
-             
-                // const response = await axios.get("http://localhost:5000/alljob/jobs");
                  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
                  const response = await axios.get(
-                   "http://localhost:5000/alljob/jobs",
+                   `${process.env.REACT_APP_BACKEND_URL}/alljob/jobs`,
                    {
                      headers: {
                        Authorization: `Bearer ${token}`, // Include the token in the request headers
@@ -119,27 +119,27 @@ const JobListings = () => {
             const token = localStorage.getItem("token");
             const emailId=localStorage.getItem("emailId");
             await axios.post(
-                "http://localhost:5000/email/send-email",
-                {
-                    userEmail: emailId,
-                    jobTitle: job.title,
-                    jobSalary: job.salary,
-                    jobDuration: job.duration // Or any other duration field if available
+              `${process.env.REACT_APP_BACKEND_URL}/email/send-email`,
+              {
+                userEmail: emailId,
+                jobTitle: job.title,
+                jobSalary: job.salary,
+                jobDuration: job.duration, // Or any other duration field if available
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+              }
             );
             await axios.post(
-                `http://localhost:5000/api/apply/${job._id}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+              `${process.env.REACT_APP_BACKEND_URL}/api/apply/${job._id}`,
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
             // Send email
            

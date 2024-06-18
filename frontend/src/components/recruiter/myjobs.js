@@ -30,14 +30,17 @@ const JobTile = (props) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/jobs/${job._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(jobDetails),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/jobs/${job._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(jobDetails),
+        }
+      );
       const data = await res.json();
       // setJobDetails(data);
       console.log(data);
@@ -55,13 +58,16 @@ const JobTile = (props) => {
   const handleDeleteJob=async()=>{
     try{
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/jobs/${job._id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/jobs/${job._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       console.log(data);
       setOpen(false);
@@ -401,13 +407,16 @@ useEffect(()=>{
  try{
   const fetchJobs=async()=>{
              const token = localStorage.getItem("token");
-             const res = await fetch("http://localhost:5000/api/jobs", {
-               method: "GET",
-               headers: {
-                 "Content-Type": "application/json",
-                 Authorization: `Bearer ${token}`,
-               },
-             });
+             const res = await fetch(
+               `${process.env.REACT_APP_BACKEND_URL}/api/jobs`,
+               {
+                 method: "GET",
+                 headers: {
+                   "Content-Type": "application/json",
+                   Authorization: `Bearer ${token}`,
+                 },
+               }
+             );
              const jobs=await res.json();
              console.log("jobs ",jobs);
              setJobs(jobs);

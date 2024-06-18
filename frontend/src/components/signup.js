@@ -46,17 +46,21 @@ export default function Signup() {
         console.log(downloadURL);
       }
     
-      const response = await axios.post("http://localhost:5000/user/register", {
-        name: name,
-        email: email,
-        password: password,
-        type: type,
-        pic: downloadURL
-      }, {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/register`,
+        {
+          name: name,
+          email: email,
+          password: password,
+          type: type,
+          pic: downloadURL,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response.data); 
       toast.success("Signup successful!");
     } catch (error) {
