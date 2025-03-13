@@ -457,7 +457,7 @@ router.get("/users",protect, async (req, res) => {
     const jobApplicants = await Profile.find({
          userId: { $in: userIds },
        });
-    // console.log("jobapplicants",jobApplicants);
+    console.log("jobapplicants",jobApplicants);
     res.json(jobApplicants);
   } catch (error) {
     console.error(error);

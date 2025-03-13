@@ -2,10 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { storage } from "./firebase/firebase.js";
-import { v4 as uuidv4 } from "uuid";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import imageCompression from 'browser-image-compression';
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -15,9 +11,17 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pic, setPic] = useState(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async(e) => {
     const file = e.target.files[0];
-    setPic(file);
+    if(!file)return;
+    const data=new FormData();
+    data.append("file",file);
+    data.append("upload_preset","jobportal");
+    data.append("cloud_name", "dm3m12wzq");
+    const response = await axios.post("https://api.cloudinary.com/v1_1/dm3m12wzq/image/upload",data);
+    console.log(response.data.secure_url);
+    setPic(response.data.secure_url
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -28,23 +32,6 @@ export default function Signup() {
     }
 
     try {
-      let downloadURL = "";
-      if (pic) {
-        const options = {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 800,
-          useWebWorker: true
-        };
-        
-        const compressedFile = await imageCompression(pic, options);
-        console.log('Original File:', pic);
-        console.log('Compressed File:', compressedFile);
-
-        const imageRef = ref(storage, `images/${uuidv4()}`);
-        await uploadBytes(imageRef, compressedFile);
-        downloadURL = await getDownloadURL(imageRef);
-        console.log(downloadURL);
-      }
     
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/user/register`,
@@ -53,7 +40,7 @@ export default function Signup() {
           email: email,
           password: password,
           type: type,
-          pic: downloadURL,
+          pic: pic,
         },
         {
           headers: {
@@ -191,7 +178,6 @@ export default function Signup() {
                       name="pic"
                       type="file"
                       autoComplete="pic"
-                      required
                       onChange={handleFileChange}
                       accept="image/*"
                       className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
