@@ -14,11 +14,12 @@ import ApplicantPage from "./components/Page/ApplicantPage";
 import LogoutPage from "./components/LogoutPage";
 import JobListings from "./components/Page/BrowseJobPage";
 import Notification from "./components/Page/Notification";
+
 function App() {
   return (
     <div>
       <Router>
-        <Navbar />
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
