@@ -70,7 +70,7 @@ const Navbar = () => {
         ) : (
           <ul className="flex space-x-6">
             <li className="nav-item">
-              <Link to="/login" className="nav-link">
+              <Link to="/" className="nav-link">
                 <button className="btn">Login</button>
               </Link>
             </li>

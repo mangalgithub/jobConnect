@@ -16,12 +16,6 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  resumeUrl: {
-    type: String,
-  },
-  profilePhotoUrl: {
-    type: String,
-  },
   institutions: [
     {
       name: String,

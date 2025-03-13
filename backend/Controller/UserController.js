@@ -12,8 +12,9 @@ const generatetoken = (id) => {
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const { type, name,pic, email, password } = req.body;
+
     console.log(req.body);
-    if (!name || !email || !password || !type || !pic) {
+    if (!name || !email || !password || !type ) {
       console.log("Provide info");
       return res.status(400).json({
         message: "Not all information provided"
@@ -31,6 +32,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedpassword = await bcrypt.hash(password, salt);
     const user = await User.create({ name, email, pic, password: hashedpassword, type });
+
     if (user) {
       const token = generatetoken(user._id);
       return res.status(200).json({
@@ -38,7 +40,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
         name: user.name,
         email: user.email,
         type: user.type,
-        pic: user.pic,
         token: token,
         message: "User created"
       });
@@ -77,7 +78,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
       name: user.name,
       email: user.email,
       type: user.type,
-      pic: user.pic,
       token: token,
       message: "Login successful",
     });
