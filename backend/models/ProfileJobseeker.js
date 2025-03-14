@@ -23,6 +23,14 @@ const userSchema = new mongoose.Schema({
       endYear: String,
     },
   ],
+  resume: {
+    type: String,
+    required: true,
+  },
+  profilePhoto: {
+    type: String,
+    required: true,
+  },
   skills: [String],
 });
 

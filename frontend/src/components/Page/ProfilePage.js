@@ -81,7 +81,7 @@ function ProfilePage() {
 
   const handleUpdateDetails = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       const userProfile = {
         name,
@@ -92,7 +92,9 @@ function ProfilePage() {
         profilePhoto,
       };
 
-      await axios.post(
+      console.log("Sending user profile:", userProfile);
+
+      const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/seeker/profile`,
         userProfile,
         {
@@ -102,12 +104,23 @@ function ProfilePage() {
         }
       );
 
-      toast.success('Details updated successfully');
+      console.log("Server response:", response);
+
+      toast.success("Details updated successfully");
     } catch (error) {
-      toast.error(`Error updating details: ${error.message}`);
+      console.error("Error updating details:", error);
+      if (error.response) {
+        console.error("Server responded with:", error.response.data);
+        toast.error(
+          `Error updating details: ${
+            error.response.data.message || error.message
+          }`
+        );
+      } else {
+        toast.error(`Error updating details: ${error.message}`);
+      }
     }
   };
-
   return (
     <>
       <Toaster />

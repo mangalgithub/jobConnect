@@ -2,6 +2,7 @@ const express=require('express');
 const mongoose=require('mongoose');
 const jwtAuth=require('../lib/jwtAuth');
 const {protect}=require('../middleware/auth.js');
+const checkProfileComplete=require("../middleware/checkProfile.js");
 const JobApplicant=require('../models/JobApplicant.js');
 const Recruiter=require('../models/Recruiter.js');
 const Rating=require('../models/Rating.js');
@@ -551,7 +552,8 @@ router.get("/jobseekers",(req,res)=>{
 })
 
 //apply for a job
-router.post("/apply/:id",protect, async (req, res) => {
+router.post("/apply/:id",protect,checkProfileComplete, async (req, res) => {
+  console.log("Executing apply route");
   const user = req.user;
   const { id } = req.params;
   console.log("id",id);
