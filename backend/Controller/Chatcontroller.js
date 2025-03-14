@@ -2,8 +2,11 @@ const Chat = require("../models/Message.js");
 
 const getMessages = async (req, res) => {
     try {
+        console.log(req.params.email)
         const messages = await Chat.find({ $or: [{ from: req.params.email }, { to: req.params.email }] }).sort("createdAt");
+        console.log(messages);
         res.json(messages);
+
     } catch (error) {
         res.status(500).json({ error: "Error fetching messages" });
     }

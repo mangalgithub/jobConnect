@@ -15,6 +15,7 @@ import LogoutPage from "./components/LogoutPage";
 import JobListings from "./components/Page/BrowseJobPage";
 import Notification from "./components/Page/Notification";
 import ChatPage from "./components/Page/ChatPage";
+import MessagePage from "./components/Page/MessagePage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/browse" element={<JobListings/>}/>
          <Route path="/notification" element={<Notification/>}/>
          <Route path="/chat/:email" element={<ChatPage/>}/>
+         <Route path="/messages" element={<MessagePage/>}/>
         </Routes>
       </Router>
     </div>
