@@ -448,21 +448,36 @@ router.put("/rating", (req, res) => {
 });
 
 // to get all the users on the recruiter page
-router.get("/users",protect, async (req, res) => {
-  // console.log("req",req);
+router.get("/other",protect, async (req, res) => {
   const user = req.user;
- try{
+  console.log("User:", user);
+
+  if (!user || !user._id) {
+    return res.status(400).json({ message: "User ID is missing" });
+  }
+
+  try {
     const applications = await Application.find({ recruiterId: user._id });
-    const userIds=applications.map((application)=>application.userId);
-    const jobApplicants = await Profile.find({
-         userId: { $in: userIds },
-       });
-    console.log("jobapplicants",jobApplicants);
+
+    console.log("Applications:", applications);
+
+    if (applications.length === 0) {
+      return res.status(404).json({ message: "No applications found" });
+    }
+
+    const userIds = applications.map((application) => application.userId);
+    console.log("User IDs:", userIds);
+
+    const jobApplicants = await Profile.find({ userId: { $in: userIds } });
+    console.log("Job Applicants:", jobApplicants);
+
     res.json(jobApplicants);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
- });
+});
+
 
 //to get all the jobs created by recruiter
 router.get("/jobs",protect, async (req, res) => {

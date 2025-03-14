@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase/firebase';
 import toast, { Toaster } from 'react-hot-toast';
 
 function ProfilePage() {
@@ -10,8 +8,8 @@ function ProfilePage() {
   const [institutions, setInstitutions] = useState([{ id: 1, name: '', startYear: '', endYear: '' }]);
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
-  const [resume, setResume] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [resume, setResume] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState('');
 
   const handleAddInstitution = () => {
     setInstitutions([
@@ -21,10 +19,11 @@ function ProfilePage() {
   };
 
   const handleInstitutionChange = (id, field, value) => {
-    const updatedInstitutions = institutions.map((institution) =>
-      institution.id === id ? { ...institution, [field]: value } : institution
+    setInstitutions(
+      institutions.map((institution) =>
+        institution.id === id ? { ...institution, [field]: value } : institution
+      )
     );
-    setInstitutions(updatedInstitutions);
   };
 
   const handleAddSkill = (e) => {
@@ -38,27 +37,59 @@ function ProfilePage() {
     setSkills(skills.filter((skill) => skill !== skillToRemove));
   };
 
-  const handleResumeUpload = (e) => {
-    setResume(e.target.files[0]);
+  const uploadToCloudinary = async (file) => {
+    if (!file) return null;
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'jobportal'); // Make sure this is correct
+    data.append('cloud_name', 'dm3m12wzq'); // Replace with your Cloudinary cloud name
+
+    try {
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dm3m12wzq/upload',
+        data
+      );
+      return response.data.secure_url;
+    } catch (error) {
+      toast.error('File upload failed');
+      console.error('Cloudinary Upload Error:', error);
+      return null;
+    }
   };
 
-  const handleProfilePhotoUpload = (e) => {
-    setProfilePhoto(e.target.files[0]);
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = await uploadToCloudinary(file);
+      if (url) {
+        setResume(url);
+        toast.success('Resume uploaded successfully!');
+      }
+    }
+  };
+
+  const handleProfilePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = await uploadToCloudinary(file);
+      if (url) {
+        setProfilePhoto(url);
+        toast.success('Profile photo uploaded successfully!');
+      }
+    }
   };
 
   const handleUpdateDetails = async () => {
     try {
-      const token=localStorage.getItem('token');
-      const profilePhotoUrl = await uploadFile(profilePhoto, `profile_photos/${profilePhoto.name}`);
-      const resumeUrl = await uploadFile(resume, `resumes/${resume.name}`);
+      const token = localStorage.getItem('token');
 
       const userProfile = {
         name,
         email,
-        resumeUrl,
-        profilePhotoUrl,
         institutions,
         skills,
+        resume,
+        profilePhoto,
       };
 
       await axios.post(
@@ -77,18 +108,6 @@ function ProfilePage() {
     }
   };
 
-  const uploadFile = async (file, path) => {
-    if (!file) return '';
-    const fileRef = ref(storage, path);
-    await uploadBytes(fileRef, file);
-    return await getDownloadURL(fileRef);
-  };
-
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
   return (
     <>
       <Toaster />
@@ -101,7 +120,7 @@ function ProfilePage() {
             <label className="block mb-2 font-semibold">Name</label>
             <input
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -112,14 +131,9 @@ function ProfilePage() {
             <label className="block mb-2 font-semibold">Email</label>
             <input
               type="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              onBlur={(e) => {
-                if (!validateEmail(email)) {
-                  toast.error('Invalid email format');
-                }
-              }}
             />
           </div>
 
@@ -133,7 +147,7 @@ function ProfilePage() {
                     <label className="block mb-2 font-semibold">Institution Name</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md"
                       value={institution.name}
                       onChange={(e) => handleInstitutionChange(institution.id, 'name', e.target.value)}
                     />
@@ -142,7 +156,7 @@ function ProfilePage() {
                     <label className="block mb-2 font-semibold">Start Year</label>
                     <input
                       type="number"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md"
                       value={institution.startYear}
                       onChange={(e) => handleInstitutionChange(institution.id, 'startYear', e.target.value)}
                     />
@@ -151,7 +165,7 @@ function ProfilePage() {
                     <label className="block mb-2 font-semibold">End Year</label>
                     <input
                       type="number"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md"
                       value={institution.endYear}
                       onChange={(e) => handleInstitutionChange(institution.id, 'endYear', e.target.value)}
                     />
@@ -160,52 +174,29 @@ function ProfilePage() {
               </div>
             ))}
             <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
               onClick={handleAddInstitution}
             >
               Add Another Institution
             </button>
           </div>
 
-          {/* Skills Section */}
-          <div className="bg-white p-6 mb-6 rounded-md shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Skills</h2>
-            <div className="flex flex-wrap mb-4">
-              {skills.map((skill, index) => (
-                <div key={index} className="flex items-center bg-gray-200 px-4 py-2 rounded-md mr-2 mb-2">
-                  {skill}
-                  <button className="ml-2 text-red-500" onClick={() => handleRemoveSkill(skill)}>
-                    <i className="fas fa-times"></i>
-                  </button>
-                  </div>
-              ))}
-              <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-2"
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                placeholder="Press enter to add a skill"
-                onKeyDown={handleAddSkill}
-              />
-            </div>
-          </div>
-
-          {/* Resume Upload Section */}
+          {/* Resume Upload */}
           <div className="bg-white p-6 mb-6 rounded-md shadow-md">
             <label className="block mb-2 font-semibold">Upload Resume</label>
             <input
               type="file"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
               onChange={handleResumeUpload}
             />
           </div>
 
-          {/* Profile Photo Upload Section */}
+          {/* Profile Photo Upload */}
           <div className="bg-white p-6 mb-6 rounded-md shadow-md">
             <label className="block mb-2 font-semibold">Upload Profile Photo</label>
             <input
               type="file"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
               onChange={handleProfilePhotoUpload}
             />
           </div>
@@ -213,7 +204,7 @@ function ProfilePage() {
           {/* Update Details Button */}
           <div className="text-center">
             <button
-              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              className="px-6 py-2 bg-blue-500 text-white rounded-md"
               onClick={handleUpdateDetails}
             >
               Update Details
