@@ -12,6 +12,7 @@ const getAllJobRoute = require("./routes/FetchJobs.js");
 const EmailRoute = require("./routes/Email.js");
 const chatRoutes = require("./routes/chatRoutes.js");
 const setupSocket=require("./Controller/socket.js")
+const MessageRoute=require("./routes/MessageRoute.js")
 const app = express();
 const server = http.createServer(app);
 const io = setupSocket(server);
@@ -32,7 +33,6 @@ app.use("/seeker", ProfileRoute);
 app.use("/alljob", getAllJobRoute);
 app.use("/email", EmailRoute);
 app.use("/chat", chatRoutes);
-
 const port = 5000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
