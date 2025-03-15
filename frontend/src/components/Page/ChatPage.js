@@ -22,7 +22,9 @@ function ChatPage() {
             setMessages((prev) => [...prev, msg]);
         });
 
-        return () => socket.off("newMessage");
+        return () => {
+            socket.off("newMessage");
+        };
     }, [email]);
 
     useEffect(() => {
@@ -34,8 +36,8 @@ function ChatPage() {
 
         const msg = { from: emailId, to: email, text: message };
 
+        // Emit to server (don't manually update state here)
         socket.emit("sendMessage", msg);
-        setMessages((prev) => [...prev, msg]);
 
         try {
             await fetch(`${process.env.REACT_APP_BACKEND_URL}/chat`, {
@@ -47,7 +49,7 @@ function ChatPage() {
             console.error("Error sending message:", error);
         }
 
-        setMessage("");
+        setMessage(""); // Clear input field
     };
 
     return (
