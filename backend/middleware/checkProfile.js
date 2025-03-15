@@ -3,7 +3,7 @@ const checkProfileComplete = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const profile = await Profile.findOne({ userId });
-    console.log("profilecheck",profile);
+    //console.log("profilecheck",profile);
     if (
       !profile ||
       !profile.name ||

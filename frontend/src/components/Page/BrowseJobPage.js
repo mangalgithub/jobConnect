@@ -117,41 +117,45 @@ const JobListings = () => {
     const handleApplyJob = async (job) => {
         try {
             const token = localStorage.getItem("token");
-            const emailId=localStorage.getItem("emailId");
-            await axios.post(
-              `${process.env.REACT_APP_BACKEND_URL}/email/send-email`,
-              {
-                userEmail: emailId,
-                jobTitle: job.title,
-                jobSalary: job.salary,
-                jobDuration: job.duration, // Or any other duration field if available
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
+            const emailId = localStorage.getItem("emailId");
+    
+            const applyResponse = await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/api/apply/${job._id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
-            await axios.post(
-              `${process.env.REACT_APP_BACKEND_URL}/api/apply/${job._id}`,
-            // "http://localhost:5000/api/apply/"+job._id,
-              {},
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            // Send email
-           
-        
-            toast.success("Applied and Email sent Successfully");
-            // Update the appliedJobs state
-            setAppliedJobs([...appliedJobs, job]);
+    
+            if (applyResponse.data.success) {
+                // Send email after successful application
+                await axios.post(
+                    `${process.env.REACT_APP_BACKEND_URL}/email/send-email`,
+                    {
+                        userEmail: emailId,
+                        jobTitle: job.title,
+                        jobSalary: job.salary,
+                        jobDuration: job.duration,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+    
+                toast.success("Applied and Email sent Successfully");
+                setAppliedJobs([...appliedJobs, job]);
+            } else {
+                toast.error(applyResponse.data.message || "Failed to apply");
+            }
         } catch (error) {
-            toast.error(`Error applying job: ${error.message}`);
+            toast.error(`Error applying job: ${error.response?.data?.message || error.message}`);
         }
     };
+    
 
     return (
         <div className="flex">
