@@ -4,18 +4,12 @@ const cors = require("cors");
 require("dotenv").config();
 const db = require("./config/mongoose");
 const apiRoutes = require("./routes/apiRoutes.js");
-const downloadRoutes = require("./routes/downloadRoutes.js");
-const UserRoute = require("./routes/UserRoute.js");
-const Addroute = require("./routes/AddRoute.js");
-const ProfileRoute = require("./routes/Profilejobsekroute.js");
-const getAllJobRoute = require("./routes/FetchJobs.js");
-const EmailRoute = require("./routes/Email.js");
 const chatRoutes = require("./routes/chatRoutes.js");
-const setupSocket=require("./Controller/socket.js")
-const MessageRoute=require("./routes/MessageRoute.js")
+const { setupSocket } = require("./Controller/socket.js");
+
 const app = express();
 const server = http.createServer(app);
-const io = setupSocket(server);
+setupSocket(server); // ✅ Initialize socket and store instance
 
 app.use(cors());
 app.use(express.json());
@@ -26,13 +20,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", apiRoutes);
-app.use("/download", downloadRoutes);
-app.use("/user", UserRoute);
-app.use("/apps", Addroute);
-app.use("/seeker", ProfileRoute);
-app.use("/alljob", getAllJobRoute);
-app.use("/email", EmailRoute);
-app.use("/chat", chatRoutes);
+app.use("/chat", chatRoutes); // ✅ Chat routes now have socket support
+
 const port = 5000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
