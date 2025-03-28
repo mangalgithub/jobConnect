@@ -1,9 +1,11 @@
 const { Server } = require("socket.io");
 
+let io;
+
 function setupSocket(server) {
-    const io = new Server(server, {
+    io = new Server(server, {
         cors: {
-            origin: "*", // Allow frontend to connect
+            origin: "*",
             methods: ["GET", "POST"],
         },
     });
@@ -13,10 +15,11 @@ function setupSocket(server) {
 
         socket.on("joinRoom", (email) => {
             socket.join(email);
-            console.log(`User with email ${email} joined room`);
+            console.log(`User ${email} joined room`);
         });
 
         socket.on("sendMessage", (message) => {
+            io.to(message.from).emit("newMessage", message); // ✅ Sender also receives message instantly
             io.to(message.to).emit("newMessage", message);
         });
 
@@ -28,4 +31,6 @@ function setupSocket(server) {
     return io;
 }
 
-module.exports = setupSocket;
+const getIO = () => io; // ✅ Export io instance
+
+module.exports = { setupSocket, getIO };
