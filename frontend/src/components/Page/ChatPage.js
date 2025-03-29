@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_BACKEND_URL);
+const socket = io(process.env.REACT_APP_BACKEND_URL, { autoConnect: false });
 
 function ChatPage() {
     const { email } = useParams();
@@ -12,20 +12,48 @@ function ChatPage() {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
+        if (!socket.connected) {
+            socket.connect();
+            console.log("Socket connected.");
+        }
+
+        socket.emit("joinRoom", emailId);
         socket.emit("joinRoom", email);
+        console.log("Joined rooms:", emailId, email);
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/chat/${email}`)
+        // ✅ Fetch message history
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/chat/${emailId}`)
             .then((res) => res.json())
-            .then((data) => setMessages(Array.isArray(data) ? data : []));
-
-        socket.on("newMessage", (msg) => {
-            setMessages((prev) => [...prev, msg]);
-        });
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    setMessages(data);
+                }
+            })
+            .catch((error) => console.error("Error fetching chat history:", error));
 
         return () => {
-            socket.off("newMessage");
+            socket.off("newMessage", handleNewMessage);
         };
-    }, [email]);
+    }, [email, emailId]);
+
+    const handleNewMessage = useCallback((msg) => {
+        console.log("Received new message:", msg);
+
+        setMessages((prev) => {
+            if (!prev.some(m => m.text === msg.text && m.from === msg.from && m.to === msg.to)) {
+                return [...prev, msg];
+            }
+            return prev;
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.on("newMessage", handleNewMessage);
+
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [handleNewMessage]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,7 +64,8 @@ function ChatPage() {
 
         const msg = { from: emailId, to: email, text: message };
 
-        // Emit to server (don't manually update state here)
+        setMessages((prev) => [...prev, msg]); // Optimistic update
+
         socket.emit("sendMessage", msg);
 
         try {
@@ -49,7 +78,7 @@ function ChatPage() {
             console.error("Error sending message:", error);
         }
 
-        setMessage(""); // Clear input field
+        setMessage("");
     };
 
     return (
