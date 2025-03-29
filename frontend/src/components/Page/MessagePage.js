@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_BACKEND_URL, { autoConnect: false });
+// const socket = io("http://localhost:5000");
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
 
 const MessagePage = () => {
     const emailId = localStorage.getItem("emailId");
@@ -9,7 +10,6 @@ const MessagePage = () => {
     const [messages, setMessages] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [message, setMessage] = useState("");
-    const isMountedRef = useRef(false); // Prevent multiple listeners
 
     const handleNewMessage = useCallback((msg) => {
         console.log("Received new message in frontend:", msg);
@@ -47,6 +47,7 @@ const MessagePage = () => {
         console.log("Joined room for:", emailId);
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/chat/${emailId}`)
+        // fetch(`http://localhost:5000/chat/${emailId}`)
             .then((res) => res.json())
             .then((data) => {
                 if (!Array.isArray(data)) return;
@@ -72,6 +73,7 @@ const MessagePage = () => {
         setSelectedUser(otherPerson);
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/chat/${emailId}`)
+        // fetch(`http://localhost:5000/chat/${emailId}`)
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) {
@@ -92,6 +94,7 @@ const MessagePage = () => {
 
         try {
             await fetch(`${process.env.REACT_APP_BACKEND_URL}/chat`, {
+              // await fetch(`http://localhost:5000/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(msg),
@@ -99,8 +102,7 @@ const MessagePage = () => {
         } catch (error) {
             console.error("Error sending message:", error);
         }
-
-        setMessage("");
+        setMessages((prev) => [...prev, msg]);
     };
 
     return (

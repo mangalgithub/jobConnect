@@ -10,6 +10,34 @@
     {
       "src": "/(.*)",
       "dest": "/index.js"
+    },
+    {
+      "src": "/download/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/user/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/apps/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/seeker/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/alljob/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/email/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.js"
     }
   ]
 }

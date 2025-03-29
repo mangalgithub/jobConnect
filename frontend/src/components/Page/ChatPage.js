@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_BACKEND_URL, { autoConnect: false });
+// const socket=io("http://localhost:5000");
+const socket=io(`${process.env.REACT_APP_BACKEND_URL}`);
 
 function ChatPage() {
     const { email } = useParams();
@@ -23,6 +24,7 @@ function ChatPage() {
 
         // ✅ Fetch message history
         fetch(`${process.env.REACT_APP_BACKEND_URL}/chat/${emailId}`)
+          //  fetch(`http://localhost:5000/chat/${emailId}`)
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) {
@@ -70,6 +72,7 @@ function ChatPage() {
 
         try {
             await fetch(`${process.env.REACT_APP_BACKEND_URL}/chat`, {
+            // await fetch(`http://localhost:5000/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(msg),

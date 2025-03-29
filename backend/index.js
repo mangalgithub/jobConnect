@@ -3,9 +3,15 @@ const http = require("http");
 const cors = require("cors");
 require("dotenv").config();
 const db = require("./config/mongoose");
+const Addroute = require("./routes/AddRoute.js");
 const apiRoutes = require("./routes/apiRoutes.js");
 const chatRoutes = require("./routes/chatRoutes.js");
-const { setupSocket } = require("./Controller/socket.js");
+const downloadRoutes = require("./routes/downloadRoutes.js");
+const EmailRoute = require("./routes/Email.js");
+const UserRoute = require("./routes/UserRoute.js");
+const getAllJobRoute = require("./routes/FetchJobs.js");
+const ProfileRoute = require("./routes/Profilejobsekroute.js");
+const {setupSocket } = require("./Controller/socket.js");
 
 const app = express();
 const server = http.createServer(app);

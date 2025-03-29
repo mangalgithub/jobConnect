@@ -46,7 +46,8 @@ export default function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/user/register",
+        `${process.env.REACT_APP_BACKEND_URL}/user/register`,
+        // "http://localhost:5000/user/register",
         {
           name,
           email,

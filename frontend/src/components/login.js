@@ -15,6 +15,7 @@ export default function Login() {
        console.log("backend url ",process.env.REACT_APP_BACKEND_URL);
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/user/login`,
+        // "http://localhost:5000/user/login",
         {
           email,
           password,
