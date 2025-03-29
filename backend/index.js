@@ -15,7 +15,7 @@ const setupSocket=require("./Controller/socket.js")
 const MessageRoute=require("./routes/MessageRoute.js")
 const app = express();
 const server = http.createServer(app);
-const io = setupSocket(server);
+setupSocket(server);
 
 app.use(cors());
 app.use(express.json());
@@ -33,6 +33,9 @@ app.use("/seeker", ProfileRoute);
 app.use("/alljob", getAllJobRoute);
 app.use("/email", EmailRoute);
 app.use("/chat", chatRoutes);
+let roomMapping = {}; // Store recruiter-room mappings
+
+
 const port = 5000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
